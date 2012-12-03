@@ -29,6 +29,10 @@
  </target>
 
  <target name="prepare" depends="clean" description="Prepare for build">
+  <exec executable="composer.phar" failonerror="true">
+   <arg value="install" />
+  </exec>
+
   <mkdir dir="${basedir}/build/api"/>
   <mkdir dir="${basedir}/build/code-browser"/>
   <mkdir dir="${basedir}/build/coverage"/>

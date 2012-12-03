@@ -1,0 +1,23 @@
+{
+    "name": "mdb/document-bundle",
+    "type": "symfony-bundle",
+    "description": "MDBDocumentBundle",
+    "keywords": ["MDB"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marco Leong",
+            "email": "marcoleong@usj.edu.mo"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.1,<2.3-dev"
+    },
+
+    "autoload": {
+        "psr-0": { "MDB\\DocumentBundle": "" }
+    },
+    "target-dir": "MDB/DocumentBundle"
+}

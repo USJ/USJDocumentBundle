@@ -18,15 +18,18 @@ class PdfThumbnailGeneratorTest extends \PHPUnit_Framework_TestCase
 	private function getMockFile() 
 	{
 		$mf = new MockFile();
-		$mf->setFile($this->getGridFSFileWithBytes());
+		$mf->setFile($this->getMockGridFSFileWithBytes());
 		return $mf;
 	}
 
-	private function getGridFSFileWithBytes()
+	private function getMockGridFSFileWithBytes()
 	{
-		$gfs = new Doctrine\MongoDB\GridFSFile();
+        $gfs = $this->getMock('Doctrine\MongoDB\GridFSFile', array('getBytes'));
 		$bytes = file_get_contents(__PATH__.'/testpdf.pdf');
-		$gfs->setBytes($bytes);
-		$gfs->isDirty(false);
+		
+		$gfs->expects($this->once())
+			->method('getBytes')
+			->with($this->returnValue($bytes));
+		return $gfs;
 	}
 }

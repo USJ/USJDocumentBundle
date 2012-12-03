@@ -22,12 +22,27 @@ class PDFThumbnailGenerator
         // write to tmp folder, run the cmd with input and output param, then return the bytes.
 		$file->getFile()->getBytes();
 
+
 	}
 
     public function buildProcess()
     {
-        $procBuilder = new ProcessBuilder();
+        $procBuilder = new ProcessBuilder(array(''));
 
+    }
+
+    private function saveToDisk($bytes)
+    {
+        $dir_path = '/tmp/mdbdocuemnt';
+        $fs = $this->getLocalFilesystem($dir_path, true);
+
+        $filename = $this->getLocalFilename();
+        $fs->write($filename, $bytes);
+        return $dir_path.'/'.$filename;
+    }
+
+    private function getLocalFilename(){
+        return $this->file->getMd5().'-'.$this->file->getFilename();
     }
 
     private function getFilename()
