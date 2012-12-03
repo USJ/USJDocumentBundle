@@ -142,4 +142,5 @@ class DocumentController extends Controller
 
         return $this->container->get('mdb_document.file_response_factory')->createResponse($file, $download, $qFormat);
     }
+
 }
