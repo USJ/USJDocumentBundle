@@ -1,0 +1,15 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}
+{{ parent() }} | Document Management
+{% endblock %}
+
+{% block head_style %}
+	{{ parent() }}
+
+	 {% stylesheets filter="compass"
+        '@MDBDocumentBundle/Resources/public/sass/mdb_document.scss'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}

@@ -1,0 +1,58 @@
+/** MDBDocumentBundle */
+.documents-pane {
+	ul li {
+		display:block;
+		margin-bottom:10px;
+		position:relative;
+	}
+	.document-meta {
+		margin:10px 10px 15px 0px;
+		font-size:12px;
+		.meta {
+			display:inline;
+			margin-bottom:20px;
+			.name {
+				border:1px solid;
+				border-color: rgba(0,0,0,0.15)  rgba(0,0,0,0.15)  rgba(0,0,0,0.25);
+				border-radius: 14px 0 0 14px;
+				padding:5px 5px 5px 10px;
+				color: rgb(51, 51, 51);
+				text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.75);
+				background-color: whitesmoke;
+				background-image: linear-gradient(to bottom, rgb(255, 255, 255), rgb(230, 230, 230));
+			    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2) inset, 0px 1px 2px rgba(0, 0, 0, 0.05);
+			}
+			.value {
+				border:1px solid;
+				border-radius: 0px 14px 14px 0px;
+				padding:5px 10px 5px 5px;
+				margin-left:-4px;
+				border:1px solid;
+				border-color: rgba(0,0,0,0.15)  rgba(0,0,0,0.15)  rgba(0,0,0,0.25);
+			}
+		}
+	}
+}
+.document-toolbar {
+	margin: 17px 0 17px 0;
+	& > * {
+		display:inline;
+	}
+	#document-add-btn {
+		padding:8px 10px 8px 10px;
+	}
+	.form-search {
+		float:right;
+		button {
+			vertical-align:middle;
+		}
+	}
+
+	@media (min-width: 768px) and (max-width: 979px) {
+
+	}
+	// mobile only
+	@media (max-width: 767px) {
+		margin-bottom:40px;
+	}
+}

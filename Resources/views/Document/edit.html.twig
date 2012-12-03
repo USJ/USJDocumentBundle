@@ -1,0 +1,12 @@
+{% extends 'MDBDocumentBundle::layout.html.twig' %}
+
+{% block content %}
+
+<form action="{{ path('mdb_document_document_edit', {"id" : form.vars.value.id}) }}" method="post" {{ form_enctype(form) }}>
+	{{ form_widget(form) }}
+    <input class="btn" type="submit" value="Save" />
+</form>
+
+<a href="{{ path('mdb_document_document_index')}}" class="btn btn-warning">Cancel</a>
+
+{% endblock %}

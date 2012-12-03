@@ -1,0 +1,42 @@
+<?php 
+namespace MDB\DocumentBundle\Document;
+
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+
+/** @MongoDB\Document */
+class File
+{
+	 /** @MongoDB\Id */
+    protected $id;
+ 
+    /** @MongoDB\File */
+    protected $file;
+ 
+    /** @MongoDB\String */
+    protected $filename;
+ 
+    /** @MongoDB\String */
+    protected $mimeType;
+ 
+    /** @MongoDB\Date */
+    protected $uploadDate;
+ 
+    /** @MongoDB\Int */
+    protected $length;
+ 
+    /** @MongoDB\Int */
+    protected $chunkSize;
+ 
+    /** @MongoDB\String */
+    protected $md5;
+
+    /** @MongoDB\String */
+    protected $changeMessage;
+
+    /** @MongoDB\Int */
+    protected $version;
+
+
+
+}

@@ -1,0 +1,23 @@
+mdb_document_document_index:
+    pattern: /documents
+    defaults:  { _controller: MDBDocumentBundle:Document:index }
+
+mdb_document_document_new:
+    pattern: /document/new
+    defaults: { _controller: MDBDocumentBundle:Document:new }
+
+mdb_document_document_file:
+    pattern: /document/file
+    defaults: { _controller: MDBDocumentBundle:Document:file }
+
+mdb_document_document_show:
+    pattern: /document/show/{id}
+    defaults: { _controller: MDBDocumentBundle:Document:show }
+
+mdb_document_document_edit:
+    pattern: /document/edit/{id}
+    defaults: { _controller: MDBDocumentBundle:Document:edit }
+
+mdb_document_document_delete:
+    pattern: /document/delete/{id}
+    defaults: { _controller: MDBDocumentBundle:Document:delete }

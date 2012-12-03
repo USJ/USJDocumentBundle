@@ -1,0 +1,127 @@
+{% extends 'MDBDocumentBundle::layout.html.twig' %}
+
+{% block page_header %}
+<div class="document-toolbar">
+	<a id="document-add-btn" href="{{ path("mdb_document_document_new")}}" class="btn btn-info">
+		<i class="icon-white icon-plus"></i> 
+		Add new document
+	</a>
+
+	<form class="form-search" id="document-search">
+		<div class="input-append">
+			<input type="text" class="span2 search-query">
+			<button type="submit" class="btn">Search</button>
+		</div> 
+	</form>
+
+	<div class="btn-group" id="document-view-switch">
+	    <button class="btn"><i class="icon-th"></i></button>
+	    <button class="btn"><i class="icon-th-list"></i></button>
+	</div>
+	
+
+</div>
+{% endblock %}
+
+{% block content %}
+
+<ul>
+	
+	{% for document in pagination %}
+	<li>
+		<img src="{{ url('mdb_document_document_file', {'id' : document.files.last.id,'format' : 'small' })}}" />
+		<a href="{{ path('mdb_document_document_show' , {'id' : document.id})}}">{{ document.title }}</a> 
+		<span class="label label-info">ver.1</span>  
+		<a href="{{ path('mdb_document_document_file', {'id' : document.files.last.id,'d' : 1} ) }}"><i>{{ document.files.last.filename }} </i></a>
+		<a href="{{ path('mdb_document_document_edit', {'id': document.id} ) }}"><i class="icon-pencil"></i></a>
+		<a href="{{ path('mdb_document_document_delete', {'id': document.id} ) }}"><i class="icon-trash"></i></a>
+	</li>
+	{% endfor %}
+	
+</ul>
+
+    {{ pagination.render()|raw }}
+
+<!-- <div class="documents-pane">
+	<ul>
+		<li class="document">
+			<div class="row">		
+				<a href="#" class="thumbnail span2">
+					<img src="http://placehold.it/170x200" alt="">
+				</a>
+				<div class="description span8">
+					<h4>Awesome documentation A01</h4>
+					<p>One of the most awesome document description, you should have never seen this before Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pretium mollis dictum. Suspendisse bibendum tellus nec ipsum hendrerit interdum. Suspendisse dignissim orci ut massa hendrerit ut faucibus arcu luctus. Nulla non erat suscipit magna sollicitudin dapibus. Sed sed mauris ligula, ne </p>
+					<div class="document-meta">
+						<div class="meta">
+							<span class="name">Version</span>
+							<span class="value">12.0</span>
+						</div>
+						<div class="meta">
+							<span class="name">Uploader</span>
+							<span class="value">Marco</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+
+		<li class="document">
+			<div class="row">		
+				<a href="#" class="thumbnail span2">
+					<img src="http://placehold.it/170x200" alt="">
+				</a>
+				<div class="description span8">
+					<h4>Regex documentation</h4>
+					<p>You can learn regular expression here in Macau. One of the most awesome document description,Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pretium mollis dictum. Suspendisse bibendum tellus nec ipsums before </p>
+					<div class="document-meta">
+						<div class="meta">
+							<span class="name">Version</span>
+							<span class="value">13.0</span>
+						</div>
+						<div class="meta">
+							<span class="name">Uploader</span>
+							<span class="value">Gerald</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+
+		<li class="document">
+			<div class="row">		
+				<a href="#" class="thumbnail span2">
+					<img src="http://placehold.it/170x200" alt="">
+				</a>
+				<div class="description span8">
+					<h4>Awesome documentation A01</h4>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pretium mollis dictum. Suspendisse bibendumu luctus. Nulla non erat suscipit magna sollicitudin dapibus. Sed sed mauris ligula, neOne of the most awesome document description, you should have never seen this before </p>
+
+				</div>
+			</div>
+		</li>
+
+		<li class="document">
+			<div class="row">		
+				<a href="#" class="thumbnail span2">
+					<img src="http://placehold.it/170x200" alt="">
+				</a>
+				<div class="description span8">
+					<h4>Awesome documentation A01</h4>
+					<p>One of the mostLorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque pretium mollis dictum. Suspendisse luctus. Nulla non erat suscipit magna sollicitudin dapibus. Sed sed mauris ligula, ne awesome document description, you should have never seen this before </p>
+				</div>
+			</div>
+		</li>
+	</ul>
+</div>
+<div class="pagination">
+    <ul>
+	    <li><a href="#">Prev</a></li>
+	    <li class="active"><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">Next</a></li>
+    </ul>
+</div> -->
+{% endblock %}

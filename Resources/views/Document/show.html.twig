@@ -1,0 +1,12 @@
+{% extends 'MDBDocumentBundle::layout.html.twig' %}
+
+
+{% block content %}
+
+	<h1>{{document.title}}</h1>
+
+	{% for file in document.files %}
+	    {{file.filename}} <br />
+	{% endfor %}
+
+{% endblock %}
