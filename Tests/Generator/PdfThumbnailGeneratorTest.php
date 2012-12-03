@@ -9,6 +9,7 @@ class PdfThumbnailGeneratorTest extends \PHPUnit_Framework_TestCase
 	public function testGenerate()
 	{
 		$pdfTG = new PdfThumbnailGenerator();
+		// test as return bytes
 		$result = $pdfTG->generate($this->getMockFile(), true);
 
 		$this->assertEquals(file_get_contents(__PATH__.'/testpdf.png'), $result);
