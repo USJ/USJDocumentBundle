@@ -1,7 +1,9 @@
 <?php 
 namespace MDB\DocumentBundle\Tests\Document;
 
-class MockFile 
+use MDB\DocumentBundle\Model\FileInterface;
+
+class MockFile implements FileInterface
 {
     protected $id;
  

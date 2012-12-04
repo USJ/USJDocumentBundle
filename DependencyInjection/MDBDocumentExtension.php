@@ -25,7 +25,6 @@ class MDBDocumentExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         // load configuration to container's parameter for later use.
-        $container->setParameter('mdb_document.config.data_path', $configs[0]['file']['data_path']);
         $container->setParameter('mdb_document.imagemagick.convert.bin', $configs[0]['imagemagick']['convert']['bin']);
 
     }

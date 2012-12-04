@@ -3,9 +3,10 @@ namespace MDB\DocumentBundle\Document;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use MDB\DocumentBundle\Model\File as BaseFile;
 
 /** @MongoDB\Document */
-class File
+class File extends BaseFile
 {
 	 /** @MongoDB\Id */
     protected $id;

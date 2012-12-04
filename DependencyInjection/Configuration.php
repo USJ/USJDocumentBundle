@@ -34,16 +34,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-                ->arrayNode('file')
-                    ->children()
-                        ->scalarNode('data_path')
-                            ->cannotBeEmpty()
-                        ->end()
-                    ->end()
-                ->end()
             ->end();
-
         return $treeBuilder;
     }
 }

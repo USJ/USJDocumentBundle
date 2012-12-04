@@ -1,5 +1,5 @@
 {
-    "name": "mdb/document-bundle",
+    "name": "mdb_documentbundle",
     "type": "symfony-bundle",
     "description": "MDBDocumentBundle",
     "keywords": ["MDB"],
@@ -14,7 +14,13 @@
     "require": {
         "php": ">=5.3.2",
         "symfony/framework-bundle": ">=2.1,<2.3-dev",
-        "symfony/process": ">=2.1"
+        "symfony/process": ">=2.1",
+        "knplabs/knp-gaufrette-bundle":"dev-master"
+    },
+    "config": {
+        "bin-dir": "bin",
+        "process-timeout": "10000",
+        "github-protocols": ["https"]
     },
 
     "autoload": {

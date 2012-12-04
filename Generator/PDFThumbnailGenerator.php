@@ -2,7 +2,7 @@
 
 namespace MDB\DocumentBundle\Generator;
 
-use MDB\DocumentBundle\Document\File;
+use MDB\DocumentBundle\Model\FileInterface;
 use Gaufrette\Adapter\Local as LocalAdapter;
 use Gaufrette\Filesystem;
 use Symfony\Component\Process\Process;
@@ -18,23 +18,31 @@ class PDFThumbnailGenerator extends ContainerAware
     public $tmpPath;
     public $outputPath;
 
-	public function generate(File $file, $bytes = false)
+	public function generate(FileInterface $file, $bytes = false)
 	{
+        if($file->getMimeType() != 'application/pdf') {
+            throw new \RuntimeException('MIME type not match');
+        }
+
+        $logger = $this->container->get('logger');
+
         $this->file = $file;
         // write to tmp folder, run the cmd with input and output param, then return the bytes.
 		$this->tmpPath = $this->saveToDisk($file->getFile()->getBytes());
         $this->outputPath = '/tmp/mdbdocument/converted/'.$this->getMd5Filename();
+        $this->createDirectory('/tmp/mdbdocument/converted/');
 
         $process = $this->buildProcess();
         $process->setTimeout(3600);
+
+        $logger->info('Run command: '. $process->getCommandLine());
         $process->run();
 
         if(!$process->isSuccessful()){
-            throw new \RuntimeException('Process returns an error'.$process->getErrorOutput());
+            throw new \RuntimeException('Error on thumbnail generation: '.$process->getErrorOutput());
         }
 
-        $logger = $this->container->get('logger');
-        $logger->info('Ran command: '. $process->getCommandLine());
+        $logger->info('Done.');
 
         return ($bytes)? file_get_contents($this->outputPath): $this->outputPath;
 	}
@@ -42,28 +50,35 @@ class PDFThumbnailGenerator extends ContainerAware
     public function buildProcess()
     {
         $convert_bin = $this->container->getParameter('mdb_document.imagemagick.convert.bin');
-        $procBuilder = new ProcessBuilder(array($convert_bin));
+        $fileTmpPath = $this->tmpPath.'[0]';
+        $limitMemoryArg = '-limit memory 10M';
+        $resizeArg = '-resize 30%x30%';
+        $fileOutputPath = $this->outputPath;
+        
+        $arguments = array();
+        $arguments[] = $convert_bin;
+        $arguments[] = $limitMemoryArg;
 
-        $procBuilder->add(array('-cache 10'));
-        $procBuilder->add(array($this->tmpPath.'[0]'));
-        $procBuilder->add(array('-resize 30%x30%'));
+        $arguments[] = "'".$fileTmpPath."'";
+        $arguments[] = $resizeArg;
+        $arguments[] = "'".$this->outputPath."'";
+        // '/usr/bin/convert' -limit memory 10M '/tmp/mdbdocument/md5sum-mockfilename[0]' -resize 30%x30% '/tmp/mdbdocument/converted/md5sum-mockfilename'
+        $proc = new Process(implode(' ',$arguments));
 
-        $procBuilder->add(array($this->outputPath));
-        return $procBuilder->getProcess();
+        return $proc;
     }
 
     private function saveToDisk($bytes)
     {
-        $dir_path = '/tmp/mdbdocuemnt';
+        $dir_path = '/tmp/mdbdocument';
         $fs = $this->getLocalFilesystem($dir_path, true);
         $filename = $this->getMd5Filename();
-
         $fs->write($filename, $bytes);
-
-        return $dir_path.'/'.$filename;
+        return $dir_path.DIRECTORY_SEPARATOR.$filename;
     }
 
-    private function getMd5Filename(){
+    private function getMd5Filename()
+    {
         return $this->file->getMd5().'-'.$this->file->getFilename();
     }
 
@@ -72,7 +87,15 @@ class PDFThumbnailGenerator extends ContainerAware
         return $this->file->getFilename();
     }
 
-    private function getLocalFilesystem($dir_path, $create = true){
-        return new Filesystem(new LocalAdapter($this->tmpPath(), $create));
+    private function createDirectory($path) 
+    {
+        if(!file_exists($path)){
+            mkdir($path);
+        }
+    }
+
+    private function getLocalFilesystem($dir_path, $create = true)
+    {
+        return new Filesystem(new LocalAdapter($dir_path, $create));
     }
 }
