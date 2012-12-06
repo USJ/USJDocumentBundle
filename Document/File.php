@@ -251,4 +251,9 @@ class File extends BaseFile
     {
         return $this->version;
     }
+    public function getEncodedFile()
+    {
+        $raw=$this->getFile()->getBytes();
+        return base64_encode($raw);
+    }
 }

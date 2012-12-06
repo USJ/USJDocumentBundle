@@ -126,13 +126,28 @@ class Document
     {
         return $this->files;
     }
+
     public function setFiles($files)
     {
         $this->files = $files;
     }
 
-    public function getLatestFile()
+    /**
+     * retrieve the latest version of raw file
+     */
+    public function getRawFile()
+    {
+        $file = end($this->files);
+        return $file->getFile()->getBytes();
+    }
+
+    public function getFile()
     {
         return end($this->files);
+    }
+
+    public function getEncodedFile()
+    {
+        return $this->getFile()->getEncodedFile();
     }
 }

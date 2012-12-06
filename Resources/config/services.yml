@@ -3,8 +3,12 @@ services:
     mdb_document_document_manager:
         class: MDB\DocumentBundle\Document\DocumentManager
         arguments: ["@doctrine.odm.mongodb.document_manager", "MDB\DocumentBundle\Document\Document" ]
-
     mdb_document.file_response_factory:
         class: MDB\DocumentBundle\Factory\FileResponseFactory
         calls:
             - [ setContainer, [ @service_container ] ]
+    # mdb_document.search_provider.document:
+    #     class: MDB\DocumentBundle\Search\DocumentProvider
+    #     arguments: [ @foq_elastica.index.mdb_document.document ]
+    #     tags: 
+    #         - { name: foq_elastica.provider, index: mdb_document, type: document}

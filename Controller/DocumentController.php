@@ -18,7 +18,7 @@ class DocumentController extends Controller
  	{
         $qb = $this->get('doctrine.odm.mongodb.document_manager')->createQueryBuilder('MDBDocumentBundle:Document');
         $request = $this->getRequest();
-        $q = $request->query->get('q');
+        $q = $request->query->get('s');
 
         $query = isset($q) ? $this->container->get('foq_elastica.finder.mdb_document.document')->createPaginatorAdapter($q) : $qb->getQuery() ;
 

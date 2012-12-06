@@ -6,7 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Gaufrette\Adapter\Local as LocalAdapter;
 use Gaufrette\Filesystem;
-
+use MDB\DocumentBundle\Model\FileInterface;
 
 /**
  * Factory for producing file response from data base
@@ -33,7 +33,7 @@ class FileResponseFactory extends ContainerAware {
         return $response;
     }
 
-    protected function resize($file, $format) {
+    protected function resize(FileInterface $file, $format) {
         $filename = $file->getMd5();
         $fs = $this->filesystem($format);
   
