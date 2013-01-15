@@ -13,9 +13,8 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.2",
-        "symfony/framework-bundle": ">=2.1,<2.3-dev",
-        "symfony/process": ">=2.1",
-        "knplabs/knp-gaufrette-bundle":"dev-master"
+        "symfony/framework-bundle": ">=2.1",
+        "liip/imagine-bundle": "dev-master"
     },
     "config": {
         "bin-dir": "bin",

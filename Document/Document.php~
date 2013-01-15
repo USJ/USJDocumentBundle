@@ -4,14 +4,16 @@ namespace MDB\DocumentBundle\Document;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
-/** @MongoDB\Document(repositoryClass="MDB\DocumentBundle\Repository\DocumentRepository") */
+/** 
+ * @MongoDB\Document(repositoryClass="MDB\DocumentBundle\Repository\DocumentRepository") 
+ */
 class Document
 {
 	/** @MongoDB\Id */
 	protected $id;
 
-	/** @MongoDB\ReferenceMany(targetDocument="File",cascade={"persist"})  */
-	protected $files;
+	/** @MongoDB\ReferenceMany(targetDocument="File",cascade={"all"})  */
+	protected $files = array();
 
     /** @MongoDB\String */
     protected $description;
@@ -19,9 +21,15 @@ class Document
     /** @MongoDB\String */
     protected $title;
 
+    /** @MongoDB\Timestamp */
+    protected $createAt;
+
+    /** @MongoDB\EmbedMany(targetDocument="Link") */
+    protected $links = array();
+
     public function __construct()
     {
-        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->createdAt = isset($this->createdAt) ? $this->createAt : time();
     }
     
     /**
@@ -120,8 +128,56 @@ class Document
     {
         return $this->files;
     }
+
     public function setFiles($files)
     {
         $this->files = $files;
     }
+
+    /**
+     * retrieve the latest version of raw file
+     */
+    public function getRawFile()
+    {
+        $file = end($this->files);
+        return $file->getFile()->getBytes();
+    }
+
+    public function getFile()
+    {
+        return end($this->files);
+    }
+
+    public function getEncodedFile()
+    {
+        return $this->getFile()->getEncodedFile();
+    }
+
+    public function getVersionNumber()
+    {
+        return count($this->files);
+    }
+
+    /**
+     * Set createAt
+     *
+     * @param timestamp $createAt
+     * @return \Document
+     */
+    public function setCreateAt($createAt)
+    {
+        $this->createAt = $createAt;
+        return $this;
+    }
+
+    /**
+     * Get createAt
+     *
+     * @return timestamp $createAt
+     */
+    public function getCreateAt()
+    {
+        return $this->createAt;
+    }
+
 }

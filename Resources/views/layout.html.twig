@@ -13,3 +13,9 @@
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
 {% endblock %}
+
+{% block foot_script %}
+    {{ parent() }}
+    <script type="text/javascript" src="/js/libs/bootstrap-editable-inline.js"></script>
+    <script type="text/javascript" src="/bundles/mdbdocument/js/mdb_document.js"></script>
+{% endblock %}

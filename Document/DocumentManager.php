@@ -2,38 +2,63 @@
 namespace MDB\DocumentBundle\Document;
 
 use Doctrine\ODM\MongoDB\DocumentManager as ODMDocumentManager ;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use MDB\DocumentBundle\Model\DocumentManager as BaseDocumentManager;
 
 /**
 * Class act as a service to access documents
 */
-class DocumentManager
+class DocumentManager extends BaseDocumentManager
 {	
-    /** @var ODM Document Manager */
+    /** @var ODM MongoDB Document Manager */
 	protected $dm;
 	/** @var class  */
 	protected $class;
 
-	public function __construct(ODMDocumentManager $dm, $class)
+    protected $repository;
+
+	public function __construct(EventDispatcherInterface $dispatcher, ODMDocumentManager $dm, $class)
 	{
+        parent::__construct($dispatcher);
+
 		$this->dm = $dm;
 		$this->class = $class;
+        $this->repository = $this->dm->getRepository($class);
 	}
 
     /**
      * @return Document $document object
      */ 
-    public function createDocument(){
+    public function createDocument()
+    {
         $document = new $this->class;
         return $document;
     }
 
+    public function deleteDocument($document)
+    {
+        $this->dm->remove($document);
+        $this->dm->flush();
+    }
+
     public function findDocuments()
     {
-        return $this->dm->getRepository($this->class)->findAll();
+        return $this->repository->findAll();
     }
 
     public function getRepository()
     {
-        return $dm->getRepository($this->class);
+        return $this->repository;
+    }
+
+    public function doSaveDocument($document)
+    {
+        $this->dm->persist($document);
+        $this->dm->flush();
+    }
+    
+    public function getClass()
+    {
+        return $this->class;
     }
 }

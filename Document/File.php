@@ -256,4 +256,31 @@ class File extends BaseFile
         $raw=$this->getFile()->getBytes();
         return base64_encode($raw);
     }
+
+    public function getBytes()
+    {
+        return $this->getFile()->getBytes();
+    }
+
+    /**
+     * Set format
+     *
+     * @param string $format
+     * @return \File
+     */
+    public function setFormat($format)
+    {
+        $this->format = $format;
+        return $this;
+    }
+
+    /**
+     * Get format
+     *
+     * @return string $format
+     */
+    public function getFormat()
+    {
+        return $this->format;
+    }
 }

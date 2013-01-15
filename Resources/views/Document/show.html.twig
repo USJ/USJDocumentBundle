@@ -1,12 +1,26 @@
 {% extends 'MDBDocumentBundle::layout.html.twig' %}
 
-
+{% block headline %}
+    {{ document.title }}
+{% endblock %}
 {% block content %}
-
-	<h1>{{document.title}}</h1>
-
-	{% for file in document.files %}
-	    {{file.filename}} <br />
-	{% endfor %}
-
+<div class="span12">
+    <div class="span8">
+        {% include 'MDBDocumentBundle:Document:embed_view.html.twig' with { 'file': document.files.last }%}
+    </div>
+    <div class="span3">
+        <table class="table table-bordered">
+            <tbody>
+                {% for file in document.files %}
+                <tr>
+                    <th>Filename</th><td>{{ file.filename }}</td>
+                </tr>
+                <tr>
+                    <th>Upload date</th><td>{{ file.uploadDate|date('Y-m-d') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}

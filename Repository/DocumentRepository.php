@@ -16,4 +16,17 @@ class DocumentRepository extends ODMDocumentRepository
     { 
         return $this->createQueryBuilder('MDB\DocumentBundle\Document\Document');
     }
+    
+    public function findDocumentsByClassAndObjectId($className, $objectId)
+    {
+        if(!$objectId instanceof \MongoId)
+            $objectId = new \MongoId($objectId);
+
+        return $this->createQueryBuilder('MDB\DocumentBundle\Document\Document')
+            ->field('links.class')->equals($className)
+            ->field('links.objectId')->equals($objectId)
+            ->getQuery()
+            ->execute();
+    }
+
 }

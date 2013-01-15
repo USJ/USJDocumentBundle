@@ -1,8 +1,14 @@
 {% extends 'MDBDocumentBundle::layout.html.twig' %}
 
+{% block headline %}
+    Upload new document
+{% endblock %}
 {% block content %}
 	<form action="{{ path('mdb_document_document_new') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
+        {{ form_row(form.title) }}
+        {{ form_row(form.description) }}
+        {{ form_row(form.file) }}
+        {{ form_rest(form)}}
 	    <input class="btn" type="submit" value="Create" />
 	</form>
 {% endblock %}

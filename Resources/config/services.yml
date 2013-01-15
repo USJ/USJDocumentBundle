@@ -1,12 +1,26 @@
 services:
-#     mdb_document_document_manager:
-    mdb_document_document_manager:
+    mdb_document.manager.document:
         class: MDB\DocumentBundle\Document\DocumentManager
-        arguments: ["@doctrine.odm.mongodb.document_manager", "MDB\DocumentBundle\Document\Document" ]
+        arguments: ["@event_dispatcher", "@doctrine.odm.mongodb.document_manager", "MDB\DocumentBundle\Document\Document" ]
+
+    mdb_document.manager.link:
+        class: MDB\DocumentBundle\Document\LinkManager
+        arguments: ["@doctrine.odm.mongodb.document_manager" ]
+
     mdb_document.file_response_factory:
         class: MDB\DocumentBundle\Factory\FileResponseFactory
         calls:
             - [ setContainer, [ @service_container ] ]
+
+    mdb_document.partial_controller:
+        class: MDB\DocumentBundle\Controller\PartialController
+
+    liip_imagine.data.loader.grid_fs:
+        class: Liip\ImagineBundle\Imagine\Data\Loader\GridFSLoader
+        arguments: [ @liip_imagine, @doctrine.odm.mongodb.document_manager, 'MDB\DocumentBundle\Document\File']
+        tags:
+            - { name: liip_imagine.data.loader, loader: grid_fs}
+
     # mdb_document.search_provider.document:
     #     class: MDB\DocumentBundle\Search\DocumentProvider
     #     arguments: [ @foq_elastica.index.mdb_document.document ]

@@ -26,12 +26,9 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->arrayNode('imagemagick')
-                    ->isRequired()
-                    ->prototype('array')
-                        ->children()
-                            ->scalarNode('bin')->end()
-                        ->end()
+                ->arrayNode('thumbnail')
+                    ->children()
+                        ->scalarNode('work_dir')->end()
                     ->end()
                 ->end()
             ->end();

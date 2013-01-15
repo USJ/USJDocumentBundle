@@ -1,0 +1,18 @@
+<div class="media doc-embed-view">
+    <a class="pull-left" href="{{ path('mdb_document_document_show' , {'id' : document.id}) }}">
+        {% if document.files.last.id is defined %}
+            <img class="media-object" src="{{ document.files.last.id | imagine_filter('list_thumb') }}">
+        {% endif %}
+    </a>
+    <div class="media-body">
+        <h4 class="media-heading">{{ document.title }}</h4>
+        {{ document.description }}
+        <span class="label label-info">ver.{{ document.latestVersionNumber }}</span>
+
+        <form action="{{path('mdb_document_document_links', {'documentId':document.id }) }}" method="post">
+            <input type="hidden" name="object_id" />
+            <input type="hidden" name="object_class" />
+            <input type="submit" value="Add" class="btn" />
+        </form>
+    </div>
+</div>

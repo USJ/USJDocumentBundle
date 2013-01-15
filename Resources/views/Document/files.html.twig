@@ -1,0 +1,7 @@
+{% extends 'MDBDocumentBundle::layout.html.twig' %}
+
+{% block content %}
+<form method="post" action="{{ path('mdb_document_document_files', { 'id':document.id} ) }}">
+    {{ form_widget(form) }}
+</form>    
+{% endblock %}

@@ -1,0 +1,64 @@
+<div class="modal hide fade" id="doc-create" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>        
+        <h3>Add a document</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable tabs-left">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#doc-upload-box" data-toggle="tab">Upload</a></li>
+                <li><a href="#doc-search-box" data-toggle="tab">Search</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="doc-upload-box">
+                    <form action="{{ path('mdb_document_document_new') }}" {{form_enctype(form) }} method="post">
+                        <input type="hidden" name="object_id" value="{{ linkObject.id }}"/>
+                        <input type="hidden" name="object_class" value="{{ linkObject.class }}"/>
+                        {{ form_widget(form) }}
+                        <input type="submit" class="btn" />
+                    </form>
+<!--                     <form action="#" method="post" enctype="multipart/form-data" style="margin-right:10px;">
+                        <input type="text" id="inputEmail" placeholder="Title" class="large" style="width:100%">
+                        <textarea id="inputPassword" placeholder="any detail about your file..." style="width:100%"></textarea>
+                        <div class="file-placeholder">
+                            <button class="btn btn-info">Add Files</button>
+                            <span> or simply drop your files on this box</span>
+                        </div>
+                    </form> -->
+                   
+                </div>
+                <div class="tab-pane" id="doc-search-box">
+                    <form class="form-search doc-search">
+                        <div class="input-append">
+                            <input type="text" class="span4 search-query" placeholder="Type here to start searching...">
+                        </div>
+                    </form>
+                    <div id="doc-search-results"></div>
+                </div>
+            </div>
+        </div> 
+   </div>
+   
+</div>
+
+<script type="text/template" id="search-results-template">
+    <table class="table table-condensed table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Rev.</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% _.each(docs, function(doc) { %>
+            <tr>
+                <td><%= doc.title %></td>
+                <td><%= doc.rev %></td>
+                <td>
+                    <a href="#" data-docid='<%= doc.id %>' class="add-doc-btn">Add</a>
+                </td>
+            </tr>
+           <% }); %>
+        </tbody>
+    </table>
+</script>

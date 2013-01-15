@@ -1,0 +1,27 @@
+<table class="table table-striped documents-table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Version</th>
+            <th>Filename</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for document in documents %}
+        <tr data-docid="{{ document.id }}">
+            <td>
+                <a class="pull-left" href="{{ path('mdb_document_document_show' , {'id' : document.id}) }}">
+
+                    {% if document.files.last.id is defined %}
+                        <img class="media-object" src="{{ document.files.last.id | imagine_filter('list_thumb') }}">
+                    {% endif %}
+                </a>
+            </td>
+            <td>{{ document.title }}</td>
+            <td>{{ document.latestVersionNumber }}</td>
+            <td>{{ document.files.last.filename }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

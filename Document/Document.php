@@ -3,7 +3,6 @@ namespace MDB\DocumentBundle\Document;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-
 /** 
  * @MongoDB\Document(repositoryClass="MDB\DocumentBundle\Repository\DocumentRepository") 
  */
@@ -21,12 +20,35 @@ class Document
     /** @MongoDB\String */
     protected $title;
 
-    /** @MongoDB\Timestamp */
+    /** 
+     * @MongoDB\Timestamp 
+     * @Gedmo\Timestampable(on="create")
+     */
     protected $createAt;
+
+    /**
+     * @MongoDB\Field(type="timestamp")
+     * @Gedmo\Timestampable(on="update")
+     */
+    protected $updatedAt;
+
+    /**
+     * @Gedmo\Blameable(on="create")
+     * @MongoDB\String
+     */
+    protected $createdBy;
+
+    /**
+     * @MongoDB\String
+     * @Gedmo\Blameable(on="update")
+     */
+    protected $updatedBy;
+
+    /** @MongoDB\EmbedMany(targetDocument="Link") */
+    protected $links = array();
 
     public function __construct()
     {
-        // $this->files = new \Doctrine\Common\Collections\ArrayCollection();
         $this->createdAt = isset($this->createdAt) ? $this->createAt : time();
     }
     
@@ -40,28 +62,6 @@ class Document
         return $this->id;
     }
 
-    /**
-     * Set current
-     *
-     * @param MDB\DocumentBundle\Document\File $current
-     * @return Document
-     */
-    public function setCurrent(\MDB\DocumentBundle\Document\File $current)
-    {
-        $this->current = $current;
-        return $this;
-    }
-
-    /**
-     * Get current
-     *
-     * @return MDB\DocumentBundle\Document\File $current
-     */
-    public function getCurrent()
-    {
-        return $this->current;
-    }
-    
     /**
      * Set description
      *
@@ -112,9 +112,19 @@ class Document
      *
      * @param MDB\DocumentBundle\Document\File $files
      */
-    public function addFiles(\MDB\DocumentBundle\Document\File $files)
+    public function addFiles(\MDB\DocumentBundle\Document\File $file)
     {
-        $this->files[] = $files;
+        $this->files[] = $file;
+    }
+
+    public function addUploadedFile($upload)
+    {
+        $file = new File();
+        $file->setFile($upload->getPathname());
+        $file->setFilename($upload->getClientOriginalName());
+        $file->setMimeType($upload->getClientMimeType());
+
+        $this->addFiles($file);
     }
 
     /**
@@ -150,4 +160,53 @@ class Document
     {
         return $this->getFile()->getEncodedFile();
     }
+
+    public function getLatestVersionNumber()
+    {
+        return count($this->files);
+    }
+
+    /**
+     * Set createAt
+     *
+     * @param timestamp $createAt
+     * @return \Document
+     */
+    public function setCreateAt($createAt)
+    {
+        $this->createAt = $createAt;
+        return $this;
+    }
+
+    /**
+     * Get createAt
+     *
+     * @return timestamp $createAt
+     */
+    public function getCreateAt()
+    {
+        return $this->createAt;
+    }
+
+
+    /**
+     * Add links
+     *
+     * @param MDB\DocumentBundle\Document\Link $links
+     */
+    public function addLinks(\MDB\DocumentBundle\Document\Link $links)
+    {
+        $this->links[] = $links;
+    }
+
+    /**
+     * Get links
+     *
+     * @return Doctrine\Common\Collections\Collection $links
+     */
+    public function getLinks()
+    {
+        return $this->links;
+    }
+
 }
