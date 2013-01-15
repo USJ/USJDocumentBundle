@@ -2,7 +2,7 @@
     "name": "mdb/document-bundle",
     "type": "symfony-bundle",
     "description": "MDBDocumentBundle",
-    "keywords": ["MDB"],
+    "keywords": ["MDB","document", "management", "media"],
     "license": "MIT",
     "authors": [
         {
@@ -24,6 +24,5 @@
 
     "autoload": {
         "psr-0": { "MDB\\DocumentBundle": "" }
-    },
-    "target-dir": "MDB/DocumentBundle"
+    }
 }
