@@ -26,7 +26,6 @@ class PartialController extends Controller
             ));
     }
 
-
     public function renderUploadBoxAction($linkObject)
     {
         $document = new Document();

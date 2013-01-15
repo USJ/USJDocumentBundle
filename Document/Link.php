@@ -18,6 +18,11 @@ class Link
     /** @MongoDB\ObjectId */
     protected $objectId;
 
+    public function __construct($class = null, $objectId = null)
+    {
+        if(!is_null($class)) $this->class = $class;
+        if(!is_null($objectId)) $this->objectId = $objectId;
+    }
     /**
      * Get id
      *

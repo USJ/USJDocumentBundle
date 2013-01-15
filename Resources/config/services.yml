@@ -1,3 +1,9 @@
+parameters:
+    mdb_document.model.document.class: MDB\DocumentBundle\Document\Document
+    mdb_document.model.file.class: MDB\DocumentBundle\Document\File
+    mdb_document.model.link.class: MDB\DocumentBundle\Document\File
+
+
 services:
     mdb_document.manager.document:
         class: MDB\DocumentBundle\Document\DocumentManager
@@ -5,7 +11,15 @@ services:
 
     mdb_document.manager.link:
         class: MDB\DocumentBundle\Document\LinkManager
-        arguments: ["@doctrine.odm.mongodb.document_manager" ]
+        arguments: ["@doctrine.odm.mongodb.document_manager", %mdb_document.model.link.class% ]
+
+    mdb_document.form_type.document:
+        class: MDB\DocumentBundle\Form\Type\DocumentType
+        arguments: [%mdb_document.model.document.class%]
+
+    mdb_document.form_factory.document:
+        class: MDB\DocumentBundle\Form\Factory\FormFactory
+        arguments: ["@form.factory", "mdb_document_document", "@mdb_document.form_type.document" ]
 
     mdb_document.file_response_factory:
         class: MDB\DocumentBundle\Factory\FileResponseFactory

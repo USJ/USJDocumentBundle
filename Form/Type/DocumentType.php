@@ -3,14 +3,18 @@ namespace MDB\DocumentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
 	Symfony\Component\Form\FormBuilderInterface,
-	MDB\AssetBundle\Form\DataTransformer\NameToAssetTransformer,
 	Symfony\Component\OptionsResolver\OptionsResolverInterface,
 	Doctrine\Common\Persistence\ObjectManager;
 
-use MDB\DocumentBundle\Form\Type\FileType;
-
 class DocumentType extends AbstractType
 {
+    protected $documentClass;  
+
+    public function __construct($documentClass)
+    {
+        $this->documentClass = $documentClass;
+    }
+
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder->add('title', 'text');
@@ -19,15 +23,18 @@ class DocumentType extends AbstractType
 
         $builder->add('file', 'file',array(
             'property_path' => false
-        ));  
+        ));
 	}
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        $resolver->setDefaults(array(
+            'data_class' => $this->documentClass,
+        ));        
     }
 
     public function getName()
     {
-    	return 'document';
+    	return 'mdb_document_document';
     }
 }

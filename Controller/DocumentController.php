@@ -22,13 +22,12 @@ class DocumentController extends Controller
      * @Route("/documents.{_format}", name="mdb_document_document_index", defaults={"_format" = "html"},options={"expose" = true})
      * @Method({"GET"})
      */
- 	public function indexAction() 
+ 	public function indexAction(Request $request) 
  	{
-        $qb = $this->get('doctrine.odm.mongodb.document_manager')->createQueryBuilder('MDBDocumentBundle:Document');
-        $request = $this->getRequest();
         $q = $request->query->get('q');
         $format = $request->getRequestFormat('html');
 
+        $qb = $this->get('doctrine.odm.mongodb.document_manager')->createQueryBuilder('MDBDocumentBundle:Document');
         // TODO make search provider configurable.
         $query = isset($q) ? 
             $this->container->get('foq_elastica.finder.mdb_document.document')->createPaginatorAdapter($q) : 
@@ -66,8 +65,9 @@ class DocumentController extends Controller
     {
         // TODO possible to do it via a temporary id created before upload real document
         $document = $this->container->get('mdb_document.manager.document')->createDocument();
-
-        $form = $this->createForm(new DocumentType(), $document);
+        $form = $this->container->get("mdb_document.form_factory.document")->createForm();
+        $form->setData($document);
+        
         if($request->getMethod() == 'POST') {
             $form->bind($request);
             if($form->isValid()) {
@@ -79,8 +79,7 @@ class DocumentController extends Controller
 
                 if($object_id && $object_class) {
                     $link = new Link();
-                    $link->setClass($object_class);
-                    $link->setObjectId($object_id);
+                    $link->setClass($object_class)->setObjectId($object_id);
                     $document->addLinks($link);
                 }
 
@@ -224,8 +223,10 @@ class DocumentController extends Controller
                 ->getRepository($objectClass)
                 ->findOneById($objectId);
 
-            // duplicate links for same object validate
-            if(!$this->isLinkExist($document, $objectClass, $objectId)) {
+            $linkManager = $this->container->get('mdb_document.manager.link');
+            $link = $linkManager->createLink($objectClass, $objectId);
+
+            if($linkManager->isNewLink($document, $link)) {
                 $this->container->get('mdb_document.manager.link')->linkObject($document, $object);
             }
 
@@ -241,14 +242,4 @@ class DocumentController extends Controller
         return $this->redirect($this->generateUrl('mdb_document_document_show', array('id' => $document->getId()) ));
     }
 
-    private function isLinkExist($document, $objectClass, $objectId)
-    {
-        $links = $document->getLinks();
-        foreach($links as $link) {
-            if($link->getClass() == $objectClass && $link->getObjectId() == $objectId) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

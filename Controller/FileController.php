@@ -17,15 +17,12 @@ class FileController extends Controller
      * This could retrieve file for specific id.
      * @Route("/", name="mdb_document_document_file",options={"expose"= true} )
      */
-    public function fileAction()
+    public function fileAction(Request $request)
     {
-        $request = $this->getRequest();
-
         $qId = $request->query->get('id');
         $qFilename = $request->query->get('filename');
         $download = $request->query->get('d');
         $qFormat = $request->query->get('format');
-
 
         $fileRepo = $this->container
             ->get('doctrine_mongodb')
