@@ -28,8 +28,9 @@ class PartialController extends Controller
 
     public function renderUploadBoxAction($linkObject)
     {
-        $document = new Document();
-        $form = $this->createForm(new DocumentType(), $document);
+        $form = $this->container->get('mdb_document.form_factory.document')->createForm();
+        $form->setData(new Document());
+        
         return $this->render('MDBDocumentBundle:Partial:uploadBox.html.twig', array('form' => $form->createView(), 'linkObject' => $linkObject));
     }
 
