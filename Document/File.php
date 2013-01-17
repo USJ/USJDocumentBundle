@@ -8,40 +8,65 @@ use MDB\DocumentBundle\Model\File as BaseFile;
 /** @MongoDB\Document */
 class File extends BaseFile
 {
-	 /** @MongoDB\Id */
+	 /** 
+      * @MongoDB\Id 
+      */
     protected $id;
  
+    /** 
+     * @MongoDB\ReferenceOne(targetDocument="Document", inversedBy="files") 
+     */
+    protected $document;
+
     /** 
      * GridFSFile class
      * @MongoDB\File
      */
     protected $file;
  
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $filename;
  
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $mimeType;
  
-    /** @MongoDB\Date */
+    /** 
+     * @MongoDB\Date 
+     */
     protected $uploadDate;
  
-    /** @MongoDB\Int */
+    /** 
+     * @MongoDB\Int 
+     */
     protected $length;
  
-    /** @MongoDB\Int */
+    /** 
+     * @MongoDB\Int 
+     */
     protected $chunkSize;
  
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $md5;
 
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $changeMessage;
 
-    /** @MongoDB\Int */
+    /** 
+     * @MongoDB\Int 
+     */
     protected $version;
 
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $format;
 
     /**

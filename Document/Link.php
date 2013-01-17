@@ -18,10 +18,10 @@ class Link
     /** @MongoDB\ObjectId */
     protected $objectId;
 
-    public function __construct($class = null, $objectId = null)
+    public function __construct($class = null, \MongoId $objectId = null)
     {
-        if(!is_null($class)) $this->class = $class;
-        if(!is_null($objectId)) $this->objectId = $objectId;
+        if(!is_null($class)) $this->setClass($class);
+        if(!is_null($objectId)) $this->setObjectId($objectId);
     }
     /**
      * Get id
@@ -58,11 +58,15 @@ class Link
     /**
      * Set objectId
      *
-     * @param object_id $objectId
+     * @param string|MongoId $objectId
      * @return \Belonging
      */
     public function setObjectId($objectId)
     {
+        if(!$objectId instanceof \MongoId) {
+            $objectId = new \MongoId($objectId);
+        }
+
         $this->objectId = $objectId;
         return $this;
     }

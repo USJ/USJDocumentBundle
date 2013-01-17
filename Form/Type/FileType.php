@@ -3,7 +3,6 @@ namespace MDB\DocumentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
 	Symfony\Component\Form\FormBuilderInterface,
-	MDB\AssetBundle\Form\DataTransformer\NameToAssetTransformer,
 	Symfony\Component\OptionsResolver\OptionsResolverInterface,
 	Doctrine\Common\Persistence\ObjectManager;
 

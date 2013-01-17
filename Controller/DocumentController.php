@@ -152,8 +152,7 @@ class DocumentController extends Controller
     {
         $dm = $this->container->get('doctrine_mongodb');
 
-        $document = $dm->getRepository("MDBDocumentBundle:Document")
-            ->findOneById($id);
+        $document = $this->container->get("mdb_document.manager.document")->findDocumentById($id);
 
         // new file upload
         $file = new File();
@@ -201,9 +200,7 @@ class DocumentController extends Controller
      */
     public function linksAction(Request $request, $documentId)
     {
-        $document = $this->container->get('doctrine_mongodb')
-            ->getRepository("MDBDocumentBundle:Document")
-            ->findOneById($documentId);
+        $document = $this->container->get('mdb_document.manager.document')->findDocumentById($documentId);
 
         if($request->getMethod() == 'POST'){
             $objectClass = urldecode($request->request->get('object_class'));
@@ -240,6 +237,14 @@ class DocumentController extends Controller
         }
 
         return $this->redirect($this->generateUrl('mdb_document_document_show', array('id' => $document->getId()) ));
+    }
+
+    /**
+     * @Route("/documents/{documentId}/links", name="mdb_document_document_links_create", options={"expose" = true})
+     */
+    public function createLinksAction()
+    {
+        # code...
     }
 
 }

@@ -41,7 +41,23 @@ class DocumentManager extends BaseDocumentManager
         $this->dm->flush();
     }
 
+    public function findDocumentsByLink(Link $link)
+    {
+        return $this->repository->findBy(array(
+            'links' => array(
+                'objectId' => $link->getObjectId(),
+                'class' => $link->getClass()
+                )
+            )
+        );
+    }
+
     public function findDocuments()
+    {
+        return $this->repository->findAll();
+    }
+
+    public function findAllDocuments()
     {
         return $this->repository->findAll();
     }

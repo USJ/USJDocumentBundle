@@ -25,22 +25,22 @@ abstract class DocumentManager
         $this->dispatcher(Events::DOCUMENT_POST_PERSIST, $event);
     }
 
-    public function findAllWorkOrders()
+    public function findAllDocuments()
     {
         return $this->repository->findAll();
     }
 
-    public function findWorkOrderBy($criteria)
+    public function findDocumentBy($criteria)
     {
-        return $this->repository->findBy($criteria);
+        return $this->repository->findOneBy($criteria);
     }
 
-    public function findWorkOrderById($id)
+    public function findDocumentById($id)
     {
         return $this->repository->findOneById($id);
     }
 
-    public function findWorkOrdersBy($criteria)
+    public function findDocumentsBy($criteria)
     {
         return $this->repository->findBy($criteria);
     }

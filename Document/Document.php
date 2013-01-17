@@ -3,21 +3,30 @@ namespace MDB\DocumentBundle\Document;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+
 /** 
  * @MongoDB\Document(repositoryClass="MDB\DocumentBundle\Repository\DocumentRepository") 
  */
 class Document
 {
-	/** @MongoDB\Id */
+	/** 
+     * @MongoDB\Id
+     */
 	protected $id;
 
-	/** @MongoDB\ReferenceMany(targetDocument="File",cascade={"all"})  */
+	/** 
+     * @MongoDB\ReferenceMany(targetDocument="File",cascade={"all"}, mappedBy="document")  
+     */
 	protected $files = array();
 
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $description;
 
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $title;
 
     /** 
@@ -44,14 +53,11 @@ class Document
      */
     protected $updatedBy;
 
-    /** @MongoDB\EmbedMany(targetDocument="Link") */
+    /** 
+     * @MongoDB\EmbedMany(targetDocument="Link") 
+     */
     protected $links = array();
 
-    public function __construct()
-    {
-        $this->createdAt = isset($this->createdAt) ? $this->createAt : time();
-    }
-    
     /**
      * Get id
      *
@@ -208,5 +214,7 @@ class Document
     {
         return $this->links;
     }
+
+    
 
 }

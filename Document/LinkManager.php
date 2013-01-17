@@ -4,6 +4,7 @@ namespace MDB\DocumentBundle\Document;
 class LinkManager
 {
     protected $documentManager;
+    
     protected $class;
 
     public function __construct($documentManager, $class)
@@ -24,7 +25,8 @@ class LinkManager
     public function linkObject($document, $object)
     {
         $link = new Link();
-        $link->setClass(get_class($object));
+        $documentMetadata = $this->dm->getClassMetadata(get_class($document));
+        $link->setClass($documentMetadata->getName());
         $link->setObjectId($object->getId());
         $document->addLinks($link);
         $this->documentManager->flush($document);

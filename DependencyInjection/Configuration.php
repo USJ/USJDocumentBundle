@@ -18,11 +18,27 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('mdb_document');
+        $rootNode = $treeBuilder->root('mdb_document', 'array');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->arrayNode('document')->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('form')->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('type')->defaultValue('mdb_document_document')->end()
+                                ->scalarNode('name')->defaultValue('mdb_document_document')->end()
+                            ->end()
+                        ->end()
+                        // ->arrayNode('asset')->addDefaultsIfNotSet()
+                        //     ->children()
+                        //         ->scalarNode('type')->defaultValue('mdb_asset_asset_parent')->end()
+                        //     ->end()
+                        // ->end()
+                    ->end()
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 }

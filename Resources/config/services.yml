@@ -1,7 +1,7 @@
 parameters:
     mdb_document.model.document.class: MDB\DocumentBundle\Document\Document
     mdb_document.model.file.class: MDB\DocumentBundle\Document\File
-    mdb_document.model.link.class: MDB\DocumentBundle\Document\File
+    mdb_document.model.link.class: MDB\DocumentBundle\Document\Link
 
 
 services:
@@ -16,10 +16,22 @@ services:
     mdb_document.form_type.document:
         class: MDB\DocumentBundle\Form\Type\DocumentType
         arguments: [%mdb_document.model.document.class%]
+        tags:
+            - { name: form.type, alias: mdb_document_document }
+
+    mdb_document.form_type.document_link:
+        class: MDB\DocumentBundle\Form\Type\LinkType
+        arguments: [%mdb_document.model.link.class%]
+        tags:
+            - { name: form.type, alias: mdb_document_document_link }
+
+    mdb_document.form_factory.link:
+        class: MDB\DocumentBundle\Form\Factory\FormFactory
+        arguments: ["@form.factory", "mdb_document_document_link", "mdb_document_document_link" ]
 
     mdb_document.form_factory.document:
         class: MDB\DocumentBundle\Form\Factory\FormFactory
-        arguments: ["@form.factory", "mdb_document_document", "@mdb_document.form_type.document" ]
+        arguments: ["@form.factory", "mdb_document_document", "mdb_document_document" ]
 
     mdb_document.file_response_factory:
         class: MDB\DocumentBundle\Factory\FileResponseFactory
