@@ -1,26 +1,41 @@
 {% extends 'MDBDocumentBundle::layout.html.twig' %}
 
 {% block headline %}
-    {{ document.title }}
+    {{ document.title }} 
+    <select class="pull-right" name="version" id="document-version-switch">
+        {% for file in document.files %}
+            <option value="{{ file.version }}">Version {{ file.version }}</option>
+        {% endfor %}
+    </select>
 {% endblock %}
+
 {% block content %}
-<div class="span12">
-    <div class="span8">
-        {% include 'MDBDocumentBundle:Document:embed_view.html.twig' with { 'file': document.files.last }%}
+
+    <input type="hidden" id="document-id" value="{{ document.id }}">
+
+    <div class="span12">
+        <div class="span8">
+            {% include 'MDBDocumentBundle:Document:embed_view.html.twig' with { 'file': file }%}
+        </div>
+        <div class="span3">
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>Filename</th>
+                        <td>
+                            <a href="{{ path("mdb_document_document_file", {'id': file.id,'d':'1' }) }}">{{ file.filename }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Upload date</th>
+                        <td>{{ file.createdAt|date('Y-m-d') }}</td>
+                    </tr>
+                    <tr>
+                        <th>Version</th>
+                        <td>{{ file.version }} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="span3">
-        <table class="table table-bordered">
-            <tbody>
-                {% for file in document.files %}
-                <tr>
-                    <th>Filename</th><td>{{ file.filename }}</td>
-                </tr>
-                <tr>
-                    <th>Upload date</th><td>{{ file.uploadDate|date('Y-m-d') }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-</div>
 {% endblock %}

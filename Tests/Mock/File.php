@@ -1,5 +1,5 @@
 <?php 
-namespace MDB\DocumentBundle\Tests\Document;
+namespace MDB\DocumentBundle\Tests\Mock;
 
 use MDB\DocumentBundle\Model\FileInterface;
 

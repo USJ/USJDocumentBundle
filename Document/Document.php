@@ -3,6 +3,7 @@ namespace MDB\DocumentBundle\Document;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /** 
  * @MongoDB\Document(repositoryClass="MDB\DocumentBundle\Repository\DocumentRepository") 
@@ -15,9 +16,10 @@ class Document
 	protected $id;
 
 	/** 
-     * @MongoDB\ReferenceMany(targetDocument="File",cascade={"all"}, mappedBy="document")  
+     * @MongoDB\ReferenceMany(targetDocument="MDB\DocumentBundle\Document\File",cascade={"all"})  
+     * @Assert\Count(min="1", minMessage="You must have uploaded one file.")
      */
-	protected $files = array();
+	protected $files;
 
     /** 
      * @MongoDB\String 
@@ -56,8 +58,14 @@ class Document
     /** 
      * @MongoDB\EmbedMany(targetDocument="Link") 
      */
-    protected $links = array();
+    protected $links;
 
+    public function __construct()
+    {
+        // using ArrayCollection, is better, the Form can be handle properly
+        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->links = new \Doctrine\Common\Collections\ArrayCollection();
+    }
     /**
      * Get id
      *
@@ -118,9 +126,14 @@ class Document
      *
      * @param MDB\DocumentBundle\Document\File $files
      */
-    public function addFiles(\MDB\DocumentBundle\Document\File $file)
+    public function addFile(\MDB\DocumentBundle\Document\File $file)
     {
-        $this->files[] = $file;
+        $this->files->add($file);
+    }
+
+    public function removeFile(\MDB\DocumentBundle\Document\File $file)
+    {
+        $this->files->removeElement($file);
     }
 
     public function addUploadedFile($upload)
@@ -143,11 +156,6 @@ class Document
         return $this->files;
     }
 
-    public function setFiles($files)
-    {
-        $this->files = $files;
-    }
-
     /**
      * retrieve the latest version of raw file
      */
@@ -157,9 +165,16 @@ class Document
         return $file->getFile()->getBytes();
     }
 
-    public function getFile()
+    public function getFile($version = null)
     {
-        return end($this->files);
+        if(!is_null($version)) {
+            foreach($this->files as $file) {
+                if($file->getVersion() == $version ){
+                    return $file;
+                }
+            }
+        } 
+        return $this->files->last();
     }
 
     public function getEncodedFile()
@@ -193,16 +208,20 @@ class Document
     {
         return $this->createAt;
     }
-
-
+    
     /**
      * Add links
      *
      * @param MDB\DocumentBundle\Document\Link $links
      */
-    public function addLinks(\MDB\DocumentBundle\Document\Link $links)
+    public function addLink(\MDB\DocumentBundle\Document\Link $links)
     {
-        $this->links[] = $links;
+        $this->links->add($links);
+    }
+
+    public function removeLink(\MDB\DocumentBundle\Document\Link $linkToRemove)
+    {
+        $this->links->removeElement($linkToRemove);
     }
 
     /**
@@ -214,7 +233,90 @@ class Document
     {
         return $this->links;
     }
-
     
+    /**
+     * Add files
+     *
+     * @param MDB\DocumentBundle\Document\File $files
+     */
+    public function addFiles(\MDB\DocumentBundle\Document\File $files)
+    {
+        $this->files[] = $files;
+    }
 
+    /**
+     * Set updatedAt
+     *
+     * @param timestamp $updatedAt
+     * @return \Document
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return timestamp $updatedAt
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set createdBy
+     *
+     * @param string $createdBy
+     * @return \Document
+     */
+    public function setCreatedBy($createdBy)
+    {
+        $this->createdBy = $createdBy;
+        return $this;
+    }
+
+    /**
+     * Get createdBy
+     *
+     * @return string $createdBy
+     */
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    /**
+     * Set updatedBy
+     *
+     * @param string $updatedBy
+     * @return \Document
+     */
+    public function setUpdatedBy($updatedBy)
+    {
+        $this->updatedBy = $updatedBy;
+        return $this;
+    }
+
+    /**
+     * Get updatedBy
+     *
+     * @return string $updatedBy
+     */
+    public function getUpdatedBy()
+    {
+        return $this->updatedBy;
+    }
+
+    /**
+     * Add links
+     *
+     * @param MDB\DocumentBundle\Document\Link $links
+     */
+    public function addLinks(\MDB\DocumentBundle\Document\Link $links)
+    {
+        $this->links[] = $links;
+    }
 }

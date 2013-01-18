@@ -70,6 +70,7 @@ class DocumentController extends Controller
         
         if($request->getMethod() == 'POST') {
             $form->bind($request);
+
             if($form->isValid()) {
                 $dm = $this->container->get('doctrine_mongodb')->getManager();
                 $document->addUploadedFile($form['file']->getData());
@@ -82,7 +83,6 @@ class DocumentController extends Controller
                     $link->setClass($object_class)->setObjectId($object_id);
                     $document->addLinks($link);
                 }
-
                 $dm->persist($document);
                 $dm->flush();
             }
@@ -93,20 +93,45 @@ class DocumentController extends Controller
     }
 
     /**
+     * @Route("/documents/new_linked_document", name="mdb_document_document_new_linked_document")
+     * @Method({"POST"})
+     */
+    public function newPreLinkedDocumentAction(Request $request)
+    {
+        $form = $this->get('mdb_document.form_factory.pre_linked_document')->createForm();
+        $form->bind($request);
+        if($form->isValid()) {
+            $document = $form->getData();
+            $this->get('mdb_document.manager.document')->saveDocument($document);
+            $this->setFlash($request->getSession(), 'success', 'Adding document success.');
+            return $this->redirect($request->headers->get('referer'));              
+        }
+        $this->setFlash($request->getSession(), 'notice', 'Adding document failed.');
+        return $this->redirect($request->headers->get('referer'));              
+    }
+
+    /**
      * @Route("/documents/{id}.{_format}", name="mdb_document_document_show", defaults={"_format" =  "html"},options={"expose" = true})
      * @Method({"GET"})
      */
     public function showAction(Request $request, $id)
     {
         $format = $request->getRequestFormat('html');
-        $document = $this->container->get('doctrine_mongodb')
-            ->getManager()
-            ->getRepository('MDBDocumentBundle:Document')
-            ->findOneById($id);
+        $version = $request->query->get('version');
+
+        $document = $this->container->get('mdb_document.manager.document')->findDocumentById($id);
+
+        if($version) {
+            $file = $document->getFile($version); 
+        }else{
+            $file = $document->getFile();
+        } 
+
         if($request->isXmlHttpRequest()) {
             return $this->render("MDBDocumentBundle:Document:show.doc_embed.html.twig", array("document" => $document));   
         }
-        return $this->render("MDBDocumentBundle:Document:show.".$format.".twig", array("document" => $document));   
+
+        return $this->render("MDBDocumentBundle:Document:show.".$format.".twig", array("document" => $document, 'file' => $file));   
     }
 
     /**
@@ -181,7 +206,7 @@ class DocumentController extends Controller
      * @Route("/documents/{id}/delete", name="mdb_document_document_delete")
      * @Method({"GET","DELETE"})
      */
-    public function deleteAction($id)
+    public function deleteAction(Request $request, $id)
     {
         $document = $this->container->get('doctrine_mongodb')
             ->getRepository("MDBDocumentBundle:Document")
@@ -189,7 +214,7 @@ class DocumentController extends Controller
 
         $this->container->get('mdb_document.manager.document')->deleteDocument($document);
 
-        return $this->redirect($this->generateUrl('mdb_document_document_index'));
+        return $this->redirect($request->headers->get('referer'));              
     }
 
     /**
@@ -245,6 +270,11 @@ class DocumentController extends Controller
     public function createLinksAction()
     {
         # code...
+    }
+
+    private function setFlash($session, $type, $message) 
+    {
+        $session->getFlashBag()->add($type,$message);
     }
 
 }

@@ -5,6 +5,11 @@ parameters:
 
 
 services:
+    mdb_document.event_listener.document_subscriber:
+        class: MDB\DocumentBundle\EventListener\DocumentSubscriber
+        tags:
+            - { name: kernel.event_subscriber }
+
     mdb_document.manager.document:
         class: MDB\DocumentBundle\Document\DocumentManager
         arguments: ["@event_dispatcher", "@doctrine.odm.mongodb.document_manager", "MDB\DocumentBundle\Document\Document" ]
@@ -19,19 +24,35 @@ services:
         tags:
             - { name: form.type, alias: mdb_document_document }
 
-    mdb_document.form_type.document_link:
+    mdb_document.form_type.file:
+        class: MDB\DocumentBundle\Form\Type\FileType
+        arguments: [%mdb_document.model.file.class%]
+        tags:
+            - { name: form.type, alias: mdb_document_file }
+
+    mdb_document.form_type.link:
         class: MDB\DocumentBundle\Form\Type\LinkType
         arguments: [%mdb_document.model.link.class%]
         tags:
-            - { name: form.type, alias: mdb_document_document_link }
+            - { name: form.type, alias: mdb_document_link }
+
+    mdb_document.form_type.pre_linked_document:
+        class: MDB\DocumentBundle\Form\Type\PreLinkedDocumentType
+        arguments: [%mdb_document.model.document.class%]
+        tags:
+            - { name: form.type, alias: mdb_document_pre_linked_document }
 
     mdb_document.form_factory.link:
         class: MDB\DocumentBundle\Form\Factory\FormFactory
-        arguments: ["@form.factory", "mdb_document_document_link", "mdb_document_document_link" ]
+        arguments: ["@form.factory", "mdb_document_link", "mdb_document_link" ]
 
     mdb_document.form_factory.document:
         class: MDB\DocumentBundle\Form\Factory\FormFactory
         arguments: ["@form.factory", "mdb_document_document", "mdb_document_document" ]
+
+    mdb_document.form_factory.pre_linked_document:
+        class: MDB\DocumentBundle\Form\Factory\FormFactory
+        arguments: ["@form.factory", "mdb_document_pre_linked_document", "mdb_document_pre_linked_document" ]
 
     mdb_document.file_response_factory:
         class: MDB\DocumentBundle\Factory\FileResponseFactory

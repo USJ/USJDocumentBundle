@@ -12,11 +12,6 @@ class File extends BaseFile
       * @MongoDB\Id 
       */
     protected $id;
- 
-    /** 
-     * @MongoDB\ReferenceOne(targetDocument="Document", inversedBy="files") 
-     */
-    protected $document;
 
     /** 
      * GridFSFile class
@@ -35,9 +30,10 @@ class File extends BaseFile
     protected $mimeType;
  
     /** 
-     * @MongoDB\Date 
+     * @Gedmo\Timestampable(on="create")
+     * @MongoDB\Timestamp
      */
-    protected $uploadDate;
+    protected $createdAt;
  
     /** 
      * @MongoDB\Int 
@@ -87,7 +83,14 @@ class File extends BaseFile
      */
     public function setFile($file)
     {
-        $this->file = $file;
+        if($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            $this->file = $file->getPathname();
+            $this->setFilename($file->getClientOriginalName());
+            $this->setMimeType($file->getClientMimeType());
+        }else{
+            $this->file = $file;
+        }
+
         return $this;
     }
 
@@ -145,27 +148,6 @@ class File extends BaseFile
         return $this->mimeType;
     }
 
-    /**
-     * Set uploadDate
-     *
-     * @param date $uploadDate
-     * @return File
-     */
-    public function setUploadDate($uploadDate)
-    {
-        $this->uploadDate = $uploadDate;
-        return $this;
-    }
-
-    /**
-     * Get uploadDate
-     *
-     * @return date $uploadDate
-     */
-    public function getUploadDate()
-    {
-        return $this->uploadDate;
-    }
 
     /**
      * Set length
@@ -307,5 +289,44 @@ class File extends BaseFile
     public function getFormat()
     {
         return $this->format;
+    }
+
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set document
+     *
+     * @param MDB\DocumentBundle\Document\Document $document
+     * @return \File
+     */
+    public function setDocument(\MDB\DocumentBundle\Document\Document $document)
+    {
+        $this->document = $document;
+        return $this;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param timestamp $createdAt
+     * @return \File
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return timestamp $createdAt
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

@@ -27,7 +27,11 @@
 			{% endif %}
 		</a>
 		<div class="media-body">
-			<h4 class="media-heading">{{ document.title }}</h4>
+			<h4 class="media-heading">
+				<a href="{{ path('mdb_document_document_show' , {'id' : document.id}) }}">
+				{{ document.title }}
+				</a>
+			</h4>
 			{{ document.description }}
 			<span class="label label-info">ver.{{ document.latestVersionNumber }}</span>
 			<a href="{{ path('mdb_document_document_delete', {'id': document.id} ) }}"><i class="icon-trash"></i></a>

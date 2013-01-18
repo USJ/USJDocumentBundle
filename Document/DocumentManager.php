@@ -43,13 +43,38 @@ class DocumentManager extends BaseDocumentManager
 
     public function findDocumentsByLink(Link $link)
     {
-        return $this->repository->findBy(array(
-            'links' => array(
-                'objectId' => $link->getObjectId(),
-                'class' => $link->getClass()
-                )
-            )
-        );
+        return $this->repository->findDocumentsByClassAndObjectId($link->getClass(), $link->getObjectId());
+    }
+
+    public function linkObject(\MDB\DocumentBundle\Document\Document $document, $object)
+    {
+        $classNames = $this->dm //DocumentManager
+            ->getConfiguration()
+            ->getMetadataDriverImpl()
+            ->getAllClassNames();
+
+        if(!in_array(get_class($object), $classNames)) {
+            throw new \RuntimeException("Object class was not mapped, cannot use for linking.");
+        }
+
+        $this->doLinkObject($document, $object);
+    }
+
+    public function createPreLinkedDocument($object)
+    {
+        $classNames = $this->dm //DocumentManager
+            ->getConfiguration()
+            ->getMetadataDriverImpl()
+            ->getAllClassNames();
+
+        if(!in_array(get_class($object), $classNames)) {
+            throw new \RuntimeException("Object class was not mapped, cannot use for linking.");
+        }
+
+        $document = $this->createDocument();
+        $document->addLink(new Link(get_class($object), $object->getId()));
+
+        return $document;
     }
 
     public function findDocuments()
@@ -67,7 +92,17 @@ class DocumentManager extends BaseDocumentManager
         return $this->repository;
     }
 
-    public function doSaveDocument($document)
+    protected function doLinkObject($document, $object)
+    {
+        $link = new Link();
+        $link->setClass(get_class($object))
+            ->setObjectId($object->getId());
+        $document->addLink($link);
+        
+        $this->doSaveDocument($document);
+    }
+
+    protected function doSaveDocument($document)
     {
         $this->dm->persist($document);
         $this->dm->flush();

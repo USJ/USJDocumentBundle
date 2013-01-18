@@ -15,7 +15,7 @@ class FileController extends Controller
 
     /**
      * This could retrieve file for specific id.
-     * @Route("/", name="mdb_document_document_file",options={"expose"= true} )
+     * @Route("/files", name="mdb_document_document_file",options={"expose"= true} )
      */
     public function fileAction(Request $request)
     {

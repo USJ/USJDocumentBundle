@@ -2,6 +2,7 @@
 namespace MDB\DocumentBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /** 
  * This store the link to other object model.
@@ -9,15 +10,28 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
  */
 class Link
 {
-    /** @MongoDB\Id */
+    /** 
+     * @MongoDB\Id 
+     */
     protected $id;
 
-    /** @MongoDB\String */
-    protected $className;
+    /** 
+     * @Assert\NotNull
+     * @MongoDB\String
+     */
+    protected $class;
 
-    /** @MongoDB\ObjectId */
+    /** 
+     * @Assert\NotNull
+     * @MongoDB\ObjectId 
+     */
     protected $objectId;
 
+    public function __construct($class = null, $objectId = null)
+    {
+        if(!is_null($class)) $this->setClass($class);
+        if(!is_null($objectId)) $this->setObjectId($objectId);
+    }
     /**
      * Get id
      *
@@ -34,9 +48,9 @@ class Link
      * @param string $className
      * @return \Belonging
      */
-    public function setClassName($className)
+    public function setClass($class)
     {
-        $this->className = $className;
+        $this->class = $class;
         return $this;
     }
 
@@ -45,19 +59,23 @@ class Link
      *
      * @return string $className
      */
-    public function getClassName()
+    public function getClass()
     {
-        return $this->className;
+        return $this->class;
     }
 
     /**
      * Set objectId
      *
-     * @param object_id $objectId
+     * @param string|MongoId $objectId
      * @return \Belonging
      */
     public function setObjectId($objectId)
     {
+        if(!$objectId instanceof \MongoId) {
+            $objectId = new \MongoId($objectId);
+        }
+
         $this->objectId = $objectId;
         return $this;
     }

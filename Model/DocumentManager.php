@@ -17,12 +17,12 @@ abstract class DocumentManager
     public function saveDocument($document) 
     {
         $event = new DocumentEvent($document);
-        $this->dispatcher(Events::DOCUMENT_PRE_PERSIST, $event);
+        $this->dispatcher->dispatch(Events::DOCUMENT_PRE_PERSIST, $event);
 
         $this->doSaveDocument($document);
 
         $event = new DocumentEvent($document);
-        $this->dispatcher(Events::DOCUMENT_POST_PERSIST, $event);
+        $this->dispatcher->dispatch(Events::DOCUMENT_POST_PERSIST, $event);
     }
 
     public function findAllDocuments()

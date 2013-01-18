@@ -1,9 +1,11 @@
 <?php 
 namespace MDB\DocumentBundle\Event;
+
+use Symfony\Component\EventDispatcher\Event;
 /**
 * 
 */
-class DocumentEvent
+class DocumentEvent extends Event
 {
     protected $document;
 

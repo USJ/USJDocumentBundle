@@ -13,12 +13,9 @@ class LinkManager
         $this->class = $class;
     }
 
-    public function createLink($class = null, $objectId = null)
+    public function createLink()
     {
         $link = new $this->class;
-        if(!is_null($class) && !is_null($objectId)) {
-            $link->setClass($class)->setObjectId($objectId);
-        }
         return $link;
     }
 

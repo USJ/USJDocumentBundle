@@ -8,40 +8,61 @@ use MDB\DocumentBundle\Model\File as BaseFile;
 /** @MongoDB\Document */
 class File extends BaseFile
 {
-	 /** @MongoDB\Id */
+	 /** 
+      * @MongoDB\Id 
+      */
     protected $id;
- 
+
     /** 
      * GridFSFile class
      * @MongoDB\File
      */
     protected $file;
  
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $filename;
  
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $mimeType;
  
-    /** @MongoDB\Date */
-    protected $uploadDate;
+    /** 
+     * @Gedmo\Timestampable(on="create")
+     * @MongoDB\Timestamp
+     */
+    protected $createdAt;
  
-    /** @MongoDB\Int */
+    /** 
+     * @MongoDB\Int 
+     */
     protected $length;
  
-    /** @MongoDB\Int */
+    /** 
+     * @MongoDB\Int 
+     */
     protected $chunkSize;
  
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $md5;
 
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $changeMessage;
 
-    /** @MongoDB\Int */
+    /** 
+     * @MongoDB\Int 
+     */
     protected $version;
 
-    /** @MongoDB\String */
+    /** 
+     * @MongoDB\String 
+     */
     protected $format;
 
     /**
@@ -62,7 +83,14 @@ class File extends BaseFile
      */
     public function setFile($file)
     {
-        $this->file = $file;
+        if($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+            $this->file = $file->getPathname();
+            $this->setFilename($file->getClientOriginalName());
+            $this->setMimeType($file->getClientMimeType());
+        }else{
+            $this->file = $file;
+        }
+
         return $this;
     }
 
@@ -120,27 +148,6 @@ class File extends BaseFile
         return $this->mimeType;
     }
 
-    /**
-     * Set uploadDate
-     *
-     * @param date $uploadDate
-     * @return File
-     */
-    public function setUploadDate($uploadDate)
-    {
-        $this->uploadDate = $uploadDate;
-        return $this;
-    }
-
-    /**
-     * Get uploadDate
-     *
-     * @return date $uploadDate
-     */
-    public function getUploadDate()
-    {
-        return $this->uploadDate;
-    }
 
     /**
      * Set length
@@ -282,5 +289,22 @@ class File extends BaseFile
     public function getFormat()
     {
         return $this->format;
+    }
+
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set document
+     *
+     * @param MDB\DocumentBundle\Document\Document $document
+     * @return \File
+     */
+    public function setDocument(\MDB\DocumentBundle\Document\Document $document)
+    {
+        $this->document = $document;
+        return $this;
     }
 }

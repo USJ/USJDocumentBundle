@@ -8,9 +8,16 @@ use Symfony\Component\Form\AbstractType,
 
 class FileType extends AbstractType
 {
-	public function buildForm(FormBuilderInterface $builder, array $options)
+    protected $fileClass;
+
+    public function __construct($fileClass)
+    {
+        $this->fileClass = $fileClass;
+    }
+	
+    public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$builder->add('file','file');		
+		$builder->add('file','file');
 	}
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
@@ -23,7 +30,7 @@ class FileType extends AbstractType
 
     public function getName()
     {
-    	return 'file';
+    	return 'mdb_document_file';
     }
 
 }

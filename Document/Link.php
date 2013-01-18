@@ -2,6 +2,7 @@
 namespace MDB\DocumentBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /** 
  * This store the link to other object model.
@@ -9,16 +10,24 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
  */
 class Link
 {
-    /** @MongoDB\Id */
+    /** 
+     * @MongoDB\Id 
+     */
     protected $id;
 
-    /** @MongoDB\String */
+    /** 
+     * @Assert\NotNull
+     * @MongoDB\String
+     */
     protected $class;
 
-    /** @MongoDB\ObjectId */
+    /** 
+     * @Assert\NotNull
+     * @MongoDB\ObjectId 
+     */
     protected $objectId;
 
-    public function __construct($class = null, \MongoId $objectId = null)
+    public function __construct($class = null, $objectId = null)
     {
         if(!is_null($class)) $this->setClass($class);
         if(!is_null($objectId)) $this->setObjectId($objectId);
