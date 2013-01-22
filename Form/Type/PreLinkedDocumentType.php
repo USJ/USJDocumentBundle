@@ -22,18 +22,18 @@ class PreLinkedDocumentType extends AbstractType
         $builder->add('description', 'textarea');
 
         $builder->add('files', 'collection', array(
-                'by_reference' => false, // set false to use adder/remover instead 
-                'type' => 'mdb_document_file',
-                'allow_add' => true,
-                'allow_delete' => false
-            ));
+            'by_reference' => false, // set false to use adder/remover instead 
+            'type' => 'mdb_document_file',
+            'allow_add' => true,
+            'allow_delete' => false
+        ));
 
         $builder->add('links', 'collection', array(
-                'by_reference' => false, // set false to use adder/remover instead 
-                'type' => 'mdb_document_link',
-                'allow_add' => true,
-                'allow_delete' => false
-            ));
+            'by_reference' => false, // set false to use adder/remover instead 
+            'type' => 'mdb_document_link',
+            'allow_add' => true,
+            'allow_delete' => false
+        ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)

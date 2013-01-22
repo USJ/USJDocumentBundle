@@ -48,13 +48,9 @@ class DocumentManager extends BaseDocumentManager
 
     public function linkObject(\MDB\DocumentBundle\Document\Document $document, $object)
     {
-        $classNames = $this->dm //DocumentManager
-            ->getConfiguration()
-            ->getMetadataDriverImpl()
-            ->getAllClassNames();
-
-        if(!in_array(get_class($object), $classNames)) {
-            throw new \RuntimeException("Object class was not mapped, cannot use for linking.");
+        $objectClass = get_class($object);
+        if(!$this->isMappedClass($objectClass)) {
+            throw new \RuntimeException(sprintf("%s class was not mapped, cannot use for linking.", $objectClass));
         }
 
         $this->doLinkObject($document, $object);
@@ -62,17 +58,16 @@ class DocumentManager extends BaseDocumentManager
 
     public function createPreLinkedDocument($object)
     {
-        $classNames = $this->dm //DocumentManager
-            ->getConfiguration()
-            ->getMetadataDriverImpl()
-            ->getAllClassNames();
-
-        if(!in_array(get_class($object), $classNames)) {
-            throw new \RuntimeException("Object class was not mapped, cannot use for linking.");
+        $objectClass = get_class($object);
+        if(!$this->isMappedClass($objectClass)) {
+            throw new \RuntimeException(sprintf("%s class was not mapped, cannot use for linking.", $objectClass));
         }
 
         $document = $this->createDocument();
-        $document->addLink(new Link(get_class($object), $object->getId()));
+        $link = new Link();
+        $link->setClass($objectClass)
+            ->setObjectId($object->getId());
+        $document->addLink($link);
 
         return $document;
     }
@@ -98,7 +93,7 @@ class DocumentManager extends BaseDocumentManager
         $link->setClass(get_class($object))
             ->setObjectId($object->getId());
         $document->addLink($link);
-        
+
         $this->doSaveDocument($document);
     }
 
@@ -107,7 +102,20 @@ class DocumentManager extends BaseDocumentManager
         $this->dm->persist($document);
         $this->dm->flush();
     }
-    
+
+    public function isMappedClass($class)
+    {
+        $classNames = $this->dm //DocumentManager
+            ->getConfiguration()
+            ->getMetadataDriverImpl()
+            ->getAllClassNames();
+
+        if(!in_array($class, $classNames)) {
+            return false;
+        }
+
+        return true;
+    }
     public function getClass()
     {
         return $this->class;

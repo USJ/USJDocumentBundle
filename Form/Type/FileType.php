@@ -17,7 +17,9 @@ class FileType extends AbstractType
 	
     public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$builder->add('file','file');
+		$builder->add('file','file', array(
+                'label_render' => false
+            ));
 	}
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver)

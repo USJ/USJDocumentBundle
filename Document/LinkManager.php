@@ -13,8 +13,24 @@ class LinkManager
         $this->class = $class;
     }
 
-    public function createLink()
+    public function createLink($objectToLink = null)
     {
+        if(!is_null($objectToLink)) {
+            $classNames = $this->dm //DocumentManager
+            ->getConfiguration()
+            ->getMetadataDriverImpl()
+            ->getAllClassNames();
+
+            if(!in_array(get_class($object), $classNames)) {
+                throw new \RuntimeException("Object class was not mapped, cannot use for linking.");
+            }
+
+            $link = new $this->class;
+            $link->setClass(get_class($object));
+            $link->setObjectId($object->getId());
+            return $link;
+        }
+
         $link = new $this->class;
         return $link;
     }

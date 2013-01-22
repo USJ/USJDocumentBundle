@@ -21,9 +21,16 @@ class DocumentType extends AbstractType
 
 		$builder->add('description', 'textarea');
 
-        $builder->add('file', 'file',array(
-            'property_path' => false
-        ));
+        // $builder->add('file', 'file',array(
+        //     'property_path' => false
+        // ));
+
+        $builder->add('files', 'collection', array(
+                'by_reference' => false, // set false to use adder/remover instead 
+                'type' => 'mdb_document_file',
+                'allow_add' => true,
+                'allow_delete' => false
+            ));
 	}
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver)

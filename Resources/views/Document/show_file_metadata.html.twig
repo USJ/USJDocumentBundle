@@ -1,0 +1,18 @@
+<table class="table table-bordered">
+    <tbody>
+        <tr>
+            <th>Filename</th>
+            <td>
+                <a href="{{ path("mdb_document_document_file", {'id': file.id,'d':'1' }) }}">{{ file.filename }}</a>
+            </td>
+        </tr>
+        <tr>
+            <th>Upload date</th>
+            <td>{{ file.createdAt|date('Y-m-d') }}</td>
+        </tr>
+        <tr>
+            <th>Version</th>
+            <td>{{ file.version }} </td>
+        </tr>
+    </tbody>
+</table>

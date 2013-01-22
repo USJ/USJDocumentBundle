@@ -35,7 +35,7 @@ class Document
      * @MongoDB\Timestamp 
      * @Gedmo\Timestampable(on="create")
      */
-    protected $createAt;
+    protected $createdAt;
 
     /**
      * @MongoDB\Field(type="timestamp")
@@ -193,9 +193,9 @@ class Document
      * @param timestamp $createAt
      * @return \Document
      */
-    public function setCreateAt($createAt)
+    public function setCreatedAt($createdAt)
     {
-        $this->createAt = $createAt;
+        $this->createdAt = $createdAt;
         return $this;
     }
 
@@ -204,9 +204,9 @@ class Document
      *
      * @return timestamp $createAt
      */
-    public function getCreateAt()
+    public function getCreatedAt()
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
     
     /**

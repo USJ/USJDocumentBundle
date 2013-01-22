@@ -1,7 +1,21 @@
 {% extends 'MDBDocumentBundle::layout.html.twig' %}
 
+{% block title %}
+    {{ parent() }} | 
+    {{ document.title}} | ver. {{ file.version }}    
+{% endblock %}
+
 {% block headline %}
     {{ document.title }} 
+
+    <!-- <div class="span3"> -->
+        <form action="{{ path('mdb_document_document_files', {'documentId': document.id }) }}"  method="POST" {{ form_enctype(fileForm) }}>
+            {{ form_row(fileForm.file) }}
+            {{ form_row(fileForm._token) }}
+            <input type="submit" value="Upload new version" class="btn">
+        </form>
+    <!-- </div> -->
+
     <select class="pull-right" name="version" id="document-version-switch">
         {% for file in document.files %}
             <option value="{{ file.version }}">Version {{ file.version }}</option>
@@ -15,27 +29,10 @@
 
     <div class="span12">
         <div class="span8">
-            {% include 'MDBDocumentBundle:Document:embed_view.html.twig' with { 'file': file }%}
+            {% include 'MDBDocumentBundle:Document:show_file_embedView.html.twig' with { 'file': file }%}
         </div>
         <div class="span3">
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <th>Filename</th>
-                        <td>
-                            <a href="{{ path("mdb_document_document_file", {'id': file.id,'d':'1' }) }}">{{ file.filename }}</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Upload date</th>
-                        <td>{{ file.createdAt|date('Y-m-d') }}</td>
-                    </tr>
-                    <tr>
-                        <th>Version</th>
-                        <td>{{ file.version }} </td>
-                    </tr>
-                </tbody>
-            </table>
+            {% include 'MDBDocumentBundle:Document:show_file_metadata.html.twig' with { 'file': file }%}
         </div>
     </div>
 {% endblock %}

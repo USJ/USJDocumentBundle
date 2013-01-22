@@ -24,35 +24,8 @@ class DocumentController extends Controller
      */
  	public function indexAction(Request $request) 
  	{
-        $q = $request->query->get('q');
-        $format = $request->getRequestFormat('html');
-
-        $qb = $this->get('doctrine.odm.mongodb.document_manager')->createQueryBuilder('MDBDocumentBundle:Document');
-        // TODO make search provider configurable.
-        $query = isset($q) ? 
-            $this->container->get('foq_elastica.finder.mdb_document.document')->createPaginatorAdapter($q) : 
-            $qb->getQuery() ;
-
-        // TODO make pagination provider configurable.
-        if($this->container->has('knp_paginator')) {
-            $paginator = $this->container->get('knp_paginator');
-            $pagination = $paginator->paginate(
-                $query,
-                $this->get('request')->query->get('page', 1)/*page number*/,
-                10
-            ); 
-        }
-
-        if(isset($q) && count($pagination) < 1 && $format === 'html') {
-            $request->getSession()->getFlashBag()->add('notice', 'No result was found.');
-        }
-
-        return $this->render("MDBDocumentBundle:Document:index.".$format.".twig", 
-            array(
-                'pagination' => $pagination, 
-                'search_term' => $q
-            )
-        );
+        $documents = $this->container->get('mdb_document.manager.document')->findAllDocuments();
+        return $this->render("MDBDocumentBundle:Document:index.html.twig", array('documents' => $documents));;
  	}
 
     /**
@@ -70,24 +43,11 @@ class DocumentController extends Controller
         
         if($request->getMethod() == 'POST') {
             $form->bind($request);
-
             if($form->isValid()) {
-                $dm = $this->container->get('doctrine_mongodb')->getManager();
-                $document->addUploadedFile($form['file']->getData());
-
-                $object_class = urldecode($request->request->get('object_class'));
-                $object_id = $request->request->get('object_id');
-
-                if($object_id && $object_class) {
-                    $link = new Link();
-                    $link->setClass($object_class)->setObjectId($object_id);
-                    $document->addLinks($link);
-                }
-                $dm->persist($document);
-                $dm->flush();
+                $this->container->get('mdb_document.manager.document')->saveDocument($form->getData());
+                $this->setFlash($request->getSession(), 'success', 'Document created success');
+                return $this->redirect($this->generateUrl('mdb_document_document_index'));
             }
-            return $this->redirect($request->headers->get('referer'));              
-
         }
         return $this->render("MDBDocumentBundle:Document:new.html.twig",array("form"=>$form->createView())); 
     }
@@ -120,9 +80,10 @@ class DocumentController extends Controller
         $version = $request->query->get('version');
 
         $document = $this->container->get('mdb_document.manager.document')->findDocumentById($id);
+        $fileForm = $this->container->get('mdb_document.form_factory.file')->createForm();
 
         if($version) {
-            $file = $document->getFile($version); 
+            $file = $document->getFile($version);
         }else{
             $file = $document->getFile();
         } 
@@ -131,33 +92,36 @@ class DocumentController extends Controller
             return $this->render("MDBDocumentBundle:Document:show.doc_embed.html.twig", array("document" => $document));   
         }
 
-        return $this->render("MDBDocumentBundle:Document:show.".$format.".twig", array("document" => $document, 'file' => $file));   
+        return $this->render("MDBDocumentBundle:Document:show.".$format.".twig", array(
+            "document" => $document, 
+            "file" => $file,
+            "fileForm" => $fileForm->createView()
+            )
+        );   
     }
 
     /**
      * allow user to edit, return edit view for normal access, accept PUT request to update
+     * 
      * @Route("/documents/{id}/edit", name="mdb_document_document_edit")
      * @Method({"GET","PUT"})
      */
     public function editAction($id)
     {
         $request = $this->getRequest();
-        $dm = $this->get('doctrine_mongodb')->getManager();
 
-        $document = $dm
-            ->getRepository("MDBDocumentBundle:Document")
-            ->findOneById($id);
-
-        $form = $this->createForm(new DocumentType(), $document);
+        $document = $this->container->get('mdb_document.manager.document')->findDocumentById($id);
+        $form = $this->container->get('mdb_document.form_factory.document')->createForm();
+        $form->setData($document);
+        
         if($request->getMethod() == 'PUT') {
             $form->bind($request);
             if($form->isValid()) {
-                $document->addUploadedFile($form['file']->getData());
-                $dm->flush($document);
+                $this->container->get('mdb_document.manager.document')->saveDocument($form->getData());
             }
-            return $this->redirect($this->generateUrl('mdb_document_document_index'));              
-
+            return $this->redirect($this->generateUrl('mdb_document_document_show', array('id' => $document->getId())));              
         }
+
         return $this->render("MDBDocumentBundle:Document:edit.html.twig", 
             array(
                 "document" => $document,
@@ -170,36 +134,33 @@ class DocumentController extends Controller
     /**
      * Helps manage the files within a document
      * 
-     * @Route("/documents/{id}/files", name="mdb_document_document_files")
+     * @Route("/documents/{documentId}/files", name="mdb_document_document_files")
      * @Method({"GET", "POST"})
      */
-    public function filesAction(Request $request, $id)
+    public function filesAction(Request $request, $documentId)
     {
-        $dm = $this->container->get('doctrine_mongodb');
-
-        $document = $this->container->get("mdb_document.manager.document")->findDocumentById($id);
+        $document = $this->container->get("mdb_document.manager.document")->findDocumentById($documentId);
 
         // new file upload
-        $file = new File();
-        $form = $this->createForm(new FileType(), $file);
+        $file = $this->container->get("mdb_document.manager.file")->createFile();
+        $form = $this->container->get("mdb_document.form_factory.file")->createForm();
+        $form->setData($file);
 
         if($request->getMethod() == 'POST') {
             $form->bind($request);
             if($form->isValid()) {
-                $file = new File();
-                $document->addUploadedFile($form['file']->getData());
-                $dm->flush($document);
+                $document->addFile($form->getData());
+                $this->container->get("mdb_document.manager.document")->saveDocument($document);
             }
-
             return $this->redirect($this->generateUrl('mdb_document_document_show', array('id' => $document->getId())));
+        }  
 
-        }   
         return $this->render("MDBDocumentBundle:Document:files.html.twig", 
             array(
                 "form" => $form->createView(), 
                 "document" => $document
-            ) 
-        );             
+            )
+        );
     }
 
     /**
@@ -208,9 +169,7 @@ class DocumentController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        $document = $this->container->get('doctrine_mongodb')
-            ->getRepository("MDBDocumentBundle:Document")
-            ->findOneById($id);
+        $document = $this->container->get('mdb_document.manager.document')->findDocumentById($id);
 
         $this->container->get('mdb_document.manager.document')->deleteDocument($document);
 
@@ -228,36 +187,6 @@ class DocumentController extends Controller
         $document = $this->container->get('mdb_document.manager.document')->findDocumentById($documentId);
 
         if($request->getMethod() == 'POST'){
-            $objectClass = urldecode($request->request->get('object_class'));
-            $objectId = $request->request->get('object_id');
-
-            if($request->getContentType() === 'json') {
-                $json = json_decode($request->getContent(), true);
-                $objectClass = $json['object_class'];
-                $objectId = $json['object_id'];
-            }
-
-            if(!isset($objectClass) || !isset($objectId)) {
-                throw new RuntimeException('Object Class and Object Id have to be defined');
-            }
-
-            $object = $this->container->get('doctrine_mongodb')
-                ->getRepository($objectClass)
-                ->findOneById($objectId);
-
-            $linkManager = $this->container->get('mdb_document.manager.link');
-            $link = $linkManager->createLink($objectClass, $objectId);
-
-            if($linkManager->isNewLink($document, $link)) {
-                $this->container->get('mdb_document.manager.link')->linkObject($document, $object);
-            }
-
-            if($request->getContentType() === 'json') {
-                $serializer = $this->container->get('jms_serializer');
-                return new Response($serializer->serialize($document, 'json'),200);
-            }else{
-                $request->getSession()->getFlashBag()->set('notice', 'Links created successfully');
-            }
             return $this->redirect($request->headers->get('referer'));
         }
 

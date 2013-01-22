@@ -1,0 +1,17 @@
+<div class="media span11">
+    <a class="pull-left" href="{{ path('mdb_document_document_show' , {'id' : document.id}) }}">
+        {% if document.files.last.id is defined %}
+            <img class="media-object" src="{{ document.files.last.id | imagine_filter('list_thumb') }}">
+        {% endif %}
+    </a>
+    <div class="media-body">
+        <h4 class="media-heading">
+            <a href="{{ path('mdb_document_document_show' , {'id' : document.id}) }}">
+            {{ document.title }}
+            </a>
+        </h4>
+        {{ document.description }}
+        <span class="label label-info">ver.{{ document.files.last.version }}</span>
+        <a href="{{ path('mdb_document_document_delete', {'id': document.id} ) }}"><i class="icon-trash"></i></a>
+    </div>
+</div>
