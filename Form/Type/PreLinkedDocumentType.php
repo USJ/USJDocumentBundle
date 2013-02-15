@@ -17,9 +17,9 @@ class PreLinkedDocumentType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title', 'text');
+        $builder->add('title', 'text',array('required' => false, 'label_render' => false ));
 
-        $builder->add('description', 'textarea');
+        $builder->add('description', 'textarea',array('required' => false, 'label_render' => false));
 
         $builder->add('files', 'collection', array(
             'by_reference' => false, // set false to use adder/remover instead 

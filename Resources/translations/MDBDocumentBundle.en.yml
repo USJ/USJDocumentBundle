@@ -1,0 +1,17 @@
+document:
+    show:
+        actions: Actions
+        filename: Filename
+        upload_date: Upload date 
+        uploaded_by: Submitted by 
+    version:
+        title: Version 
+        add: Add a new version 
+    delete: Delete 
+    confirm_delete: Are you sure you want to delete this document (this cannot be undone)?
+    unlink: 
+        message: Are you sure you want to remove this attachment?
+    form:
+        actions:
+            add: Add
+            close: Close 

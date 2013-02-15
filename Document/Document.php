@@ -5,34 +5,34 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/** 
- * @MongoDB\Document(repositoryClass="MDB\DocumentBundle\Repository\DocumentRepository") 
+/**
+ * @MongoDB\MappedSuperclass
  */
 class Document
 {
-	/** 
+    /**
      * @MongoDB\Id
      */
-	protected $id;
+    protected $id;
 
-	/** 
-     * @MongoDB\ReferenceMany(targetDocument="MDB\DocumentBundle\Document\File",cascade={"all"})  
+    /**
+     * @MongoDB\ReferenceMany(targetDocument="File",cascade={"all"})
      * @Assert\Count(min="1", minMessage="You must have uploaded one file.")
      */
-	protected $files;
+    protected $files;
 
-    /** 
-     * @MongoDB\String 
+    /**
+     * @MongoDB\String
      */
     protected $description;
 
-    /** 
-     * @MongoDB\String 
+    /**
+     * @MongoDB\String
      */
     protected $title;
 
-    /** 
-     * @MongoDB\Timestamp 
+    /**
+     * @MongoDB\Timestamp
      * @Gedmo\Timestampable(on="create")
      */
     protected $createdAt;
@@ -55,8 +55,8 @@ class Document
      */
     protected $updatedBy;
 
-    /** 
-     * @MongoDB\EmbedMany(targetDocument="Link") 
+    /**
+     * @MongoDB\EmbedMany(targetDocument="Link")
      */
     protected $links;
 
@@ -136,16 +136,6 @@ class Document
         $this->files->removeElement($file);
     }
 
-    public function addUploadedFile($upload)
-    {
-        $file = new File();
-        $file->setFile($upload->getPathname());
-        $file->setFilename($upload->getClientOriginalName());
-        $file->setMimeType($upload->getClientMimeType());
-
-        $this->addFiles($file);
-    }
-
     /**
      * Get files
      *
@@ -173,13 +163,16 @@ class Document
                     return $file;
                 }
             }
-        } 
+        }
         return $this->files->last();
     }
 
     public function getEncodedFile()
     {
-        return $this->getFile()->getEncodedFile();
+        if(end($this->files)) {
+            return end($this->files)->getEncodedFile();
+        }
+        return '';
     }
 
     public function getLatestVersionNumber()
@@ -208,7 +201,7 @@ class Document
     {
         return $this->createdAt;
     }
-    
+
     /**
      * Add links
      *
@@ -233,7 +226,7 @@ class Document
     {
         return $this->links;
     }
-    
+
     /**
      * Add files
      *
@@ -309,6 +302,7 @@ class Document
     {
         return $this->updatedBy;
     }
+
 
     /**
      * Add links

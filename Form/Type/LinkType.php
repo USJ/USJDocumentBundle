@@ -12,6 +12,13 @@ use MDB\DocumentBundle\Form\DataTransformer\MongoIdToStringTransformer;
  */
 class LinkType extends AbstractType
 {
+    protected $linkClass;
+
+    public function __construct($linkClass)
+    {
+        $this->linkClass = $linkClass;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // parent::buildForm($builder, $options);
@@ -27,7 +34,7 @@ class LinkType extends AbstractType
     {
         // parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
-                'data_class' =>'MDB\DocumentBundle\Document\Link'
+                'data_class' => $this->linkClass
             )
         );
     }

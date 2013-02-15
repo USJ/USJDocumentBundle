@@ -1,0 +1,6 @@
+services:
+    mdb_document.search.document_provider:
+        class: MDB\DocumentBundle\Search\DocumentProvider
+        arguments: ["@foq_elastica.index.mdb_document.document", %mdb_document.model.document.class%,  "@doctrine_mongodb" ]
+        tags:
+            - { name: foq_elastica.provider , index: mdb_document, type: document}

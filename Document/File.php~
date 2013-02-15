@@ -35,6 +35,12 @@ class File extends BaseFile
      */
     protected $createdAt;
  
+    /**
+     * @MongoDB\String
+     * @Gedmo\Blameable(on="create")
+     */
+    protected $uploadedBy;
+    
     /** 
      * @MongoDB\Int 
      */
@@ -306,5 +312,49 @@ class File extends BaseFile
     {
         $this->document = $document;
         return $this;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param timestamp $createdAt
+     * @return \File
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return timestamp $createdAt
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set uploadedBy
+     *
+     * @param string $uploadedBy
+     * @return \File
+     */
+    public function setUploadedBy($uploadedBy)
+    {
+        $this->uploadedBy = $uploadedBy;
+        return $this;
+    }
+
+    /**
+     * Get uploadedBy
+     *
+     * @return string $uploadedBy
+     */
+    public function getUploadedBy()
+    {
+        return $this->uploadedBy;
     }
 }

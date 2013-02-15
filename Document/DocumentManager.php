@@ -17,13 +17,16 @@ class DocumentManager extends BaseDocumentManager
 
     protected $repository;
 
-	public function __construct(EventDispatcherInterface $dispatcher, ODMDocumentManager $dm, $class)
+    protected $linkClass;
+
+	public function __construct(EventDispatcherInterface $dispatcher, ODMDocumentManager $dm, $class, $linkClass)
 	{
         parent::__construct($dispatcher);
 
 		$this->dm = $dm;
 		$this->class = $class;
         $this->repository = $this->dm->getRepository($class);
+        $this->linkClass = $linkClass;
 	}
 
     /**
@@ -46,6 +49,23 @@ class DocumentManager extends BaseDocumentManager
         return $this->repository->findDocumentsByClassAndObjectId($link->getClass(), $link->getObjectId());
     }
 
+    public function unlinkObject($document, $link)
+    {
+        $originalLinkCount = count($document->getLinks());
+        // find the link object
+        $document->removeLink($link);
+
+        if(!$originalLinkCount > count($document->getLinks())) {
+            throw new \RuntimeException("Document unlink failed");
+        }
+
+        $this->saveDocument($document);
+
+        if(count($document->getLinks()) < 1) {
+            $this->removeDocument($document);
+        }
+    }
+
     public function linkObject(\MDB\DocumentBundle\Document\Document $document, $object)
     {
         $objectClass = get_class($object);
@@ -64,7 +84,7 @@ class DocumentManager extends BaseDocumentManager
         }
 
         $document = $this->createDocument();
-        $link = new Link();
+        $link = new $this->linkClass;
         $link->setClass($objectClass)
             ->setObjectId($object->getId());
         $document->addLink($link);
@@ -87,9 +107,14 @@ class DocumentManager extends BaseDocumentManager
         return $this->repository;
     }
 
+    public function getDocumentManager()
+    {
+        return $this->dm;
+    }
+
     protected function doLinkObject($document, $object)
     {
-        $link = new Link();
+        $link = new $this->linkClass;
         $link->setClass(get_class($object))
             ->setObjectId($object->getId());
         $document->addLink($link);
@@ -116,8 +141,25 @@ class DocumentManager extends BaseDocumentManager
 
         return true;
     }
+
+    public function removeDocument($document)
+    {
+        $this->doRemoveDocument($document);
+    }
+
+    public function doRemoveDocument($document)
+    {
+        $this->dm->remove($document);
+        $this->dm->flush();
+    }
+
     public function getClass()
     {
         return $this->class;
+    }
+
+    public function isNewDocument($document)
+    {
+        return !$this->dm->getUnitOfWork()->isInIdentityMap($document);
     }
 }

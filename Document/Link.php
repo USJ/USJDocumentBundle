@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /** 
  * This store the link to other object model.
- * @MongoDB\EmbeddedDocument
+ * @MongoDB\MappedSuperclass
  */
 class Link
 {
@@ -32,6 +32,7 @@ class Link
         if(!is_null($class)) $this->setClass($class);
         if(!is_null($objectId)) $this->setObjectId($objectId);
     }
+
     /**
      * Get id
      *

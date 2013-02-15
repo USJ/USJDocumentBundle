@@ -1,7 +1,7 @@
-parameters:
-    mdb_document.model.document.class: MDB\DocumentBundle\Document\Document
-    mdb_document.model.file.class: MDB\DocumentBundle\Document\File
-    mdb_document.model.link.class: MDB\DocumentBundle\Document\Link
+# parameters:
+#     mdb_document.model.document.class: MDB\DocumentBundle\Document\Document
+#     mdb_document.model.file.class: MDB\DocumentBundle\Document\File
+#     mdb_document.model.link.class: MDB\DocumentBundle\Document\Link
 
 
 services:
@@ -12,15 +12,15 @@ services:
             - { name: kernel.event_subscriber }
 
     # Managers
-    mdb_document.manager.document:
+    mdb_document.manager.document.default:
         class: MDB\DocumentBundle\Document\DocumentManager
-        arguments: ["@event_dispatcher", "@doctrine.odm.mongodb.document_manager", "MDB\DocumentBundle\Document\Document" ]
+        arguments: ["@event_dispatcher", "@doctrine.odm.mongodb.document_manager", %mdb_document.model.document.class%, %mdb_document.model.link.class% ]
 
-    mdb_document.manager.link:
+    mdb_document.manager.link.default:
         class: MDB\DocumentBundle\Document\LinkManager
         arguments: ["@doctrine.odm.mongodb.document_manager", %mdb_document.model.link.class% ]
 
-    mdb_document.manager.file:
+    mdb_document.manager.file.default:
         class: MDB\DocumentBundle\Document\FileManager
         arguments: ["@event_dispatcher","@doctrine.odm.mongodb.document_manager", %mdb_document.model.file.class% ]
 
@@ -77,7 +77,7 @@ services:
 
     liip_imagine.data.loader.grid_fs:
         class: Liip\ImagineBundle\Imagine\Data\Loader\GridFSLoader
-        arguments: [ @liip_imagine, @doctrine.odm.mongodb.document_manager, 'MDB\DocumentBundle\Document\File']
+        arguments: [ @liip_imagine, @doctrine.odm.mongodb.document_manager, %mdb_document.model.file.class%]
         tags:
             - { name: liip_imagine.data.loader, loader: grid_fs}
 

@@ -3,9 +3,8 @@ namespace MDB\DocumentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
 	Symfony\Component\Form\FormBuilderInterface,
-	Symfony\Component\OptionsResolver\OptionsResolverInterface,
-	Doctrine\Common\Persistence\ObjectManager;
-
+	Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    
 class DocumentType extends AbstractType
 {
     protected $documentClass;  
@@ -19,7 +18,7 @@ class DocumentType extends AbstractType
 	{
 		$builder->add('title', 'text');
 
-		$builder->add('description', 'textarea');
+		$builder->add('description', 'textarea',array('required' => false));
 
         // $builder->add('file', 'file',array(
         //     'property_path' => false

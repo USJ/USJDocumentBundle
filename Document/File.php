@@ -5,12 +5,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use MDB\DocumentBundle\Model\File as BaseFile;
 
-/** @MongoDB\Document */
+/** 
+ * @MongoDB\MappedSuperclass
+ */
 class File extends BaseFile
 {
-	 /** 
-      * @MongoDB\Id 
-      */
+    /** 
+    * @MongoDB\Id 
+    */
     protected $id;
 
     /** 
@@ -35,8 +37,14 @@ class File extends BaseFile
      */
     protected $createdAt;
  
+    /**
+     * @MongoDB\String
+     * @Gedmo\Blameable(on="create")
+     */
+    protected $uploadedBy;
+    
     /** 
-     * @MongoDB\Int 
+     * @MongoDB\Int
      */
     protected $length;
  
@@ -328,5 +336,27 @@ class File extends BaseFile
     public function getCreatedAt()
     {
         return $this->createdAt;
+    }
+
+    /**
+     * Set uploadedBy
+     *
+     * @param string $uploadedBy
+     * @return \File
+     */
+    public function setUploadedBy($uploadedBy)
+    {
+        $this->uploadedBy = $uploadedBy;
+        return $this;
+    }
+
+    /**
+     * Get uploadedBy
+     *
+     * @return string $uploadedBy
+     */
+    public function getUploadedBy()
+    {
+        return $this->uploadedBy;
     }
 }
