@@ -4,34 +4,36 @@ namespace MDB\DocumentBundle\Document;
 use Doctrine\ODM\MongoDB\DocumentManager as ODMDocumentManager ;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use MDB\DocumentBundle\Model\DocumentManager as BaseDocumentManager;
+use MDB\DocumentBundle\Events;
+use MDB\DocumentBundle\Event\LinkEvent;
 
 /**
 * Class act as a service to access documents
 */
 class DocumentManager extends BaseDocumentManager
-{	
+{
     /** @var ODM MongoDB Document Manager */
-	protected $dm;
-	/** @var class  */
-	protected $class;
+    protected $dm;
+    /** @var class  */
+    protected $class;
 
     protected $repository;
 
     protected $linkClass;
 
-	public function __construct(EventDispatcherInterface $dispatcher, ODMDocumentManager $dm, $class, $linkClass)
-	{
+    public function __construct(EventDispatcherInterface $dispatcher, ODMDocumentManager $dm, $class, $linkClass)
+    {
         parent::__construct($dispatcher);
 
-		$this->dm = $dm;
-		$this->class = $class;
+        $this->dm = $dm;
+        $this->class = $class;
         $this->repository = $this->dm->getRepository($class);
         $this->linkClass = $linkClass;
-	}
+    }
 
     /**
      * @return Document $document object
-     */ 
+     */
     public function createDocument()
     {
         $document = new $this->class;
@@ -72,7 +74,6 @@ class DocumentManager extends BaseDocumentManager
         if(!$this->isMappedClass($objectClass)) {
             throw new \RuntimeException(sprintf("%s class was not mapped, cannot use for linking.", $objectClass));
         }
-
         $this->doLinkObject($document, $object);
     }
 
@@ -117,9 +118,14 @@ class DocumentManager extends BaseDocumentManager
         $link = new $this->linkClass;
         $link->setClass(get_class($object))
             ->setObjectId($object->getId());
-        $document->addLink($link);
 
+        $this->dispatcher->dispatch(new LinkEvent($link), Events::DOCUMENT_PRE_LINK );
+
+        $document->addLink($link);
         $this->doSaveDocument($document);
+
+        $this->dispatcher->dispatch(new LinkEvent($link), Events::DOCUMENT_POST_LINK );
+
     }
 
     protected function doSaveDocument($document)

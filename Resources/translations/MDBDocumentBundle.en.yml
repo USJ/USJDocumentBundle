@@ -4,6 +4,7 @@ document:
         filename: Filename
         upload_date: Upload date 
         uploaded_by: Submitted by 
+        empty_description: Empty description
     version:
         title: Version 
         add: Add a new version 
