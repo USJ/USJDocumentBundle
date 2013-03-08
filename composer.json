@@ -24,5 +24,8 @@
 
     "autoload": {
         "psr-0": { "MDB\\DocumentBundle\\": "" }
-    }
+    },
+
+    "target-dir": "MDB/DocumentBundle",
+
 }
