@@ -136,6 +136,12 @@ class Document
         $this->files->removeElement($file);
     }
 
+    public function setFiles($files)
+    {
+        $this->files = $files;
+        return $this;
+    }
+
     /**
      * Get files
      *
@@ -215,6 +221,12 @@ class Document
     public function removeLink(\MDB\DocumentBundle\Document\Link $linkToRemove)
     {
         $this->links->removeElement($linkToRemove);
+    }
+
+    public function setLinks($links)
+    {
+        $this->links = $links;
+        return $this;
     }
 
     /**

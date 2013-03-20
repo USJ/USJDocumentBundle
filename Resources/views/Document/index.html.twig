@@ -1,26 +1,50 @@
 {% extends 'MDBDocumentBundle::layout.html.twig' %}
 
 {% block page_header %}
-<div class="document-toolbar">
-	<a id="document-add-btn" href="{{ path("mdb_document_document_new")}}" class="btn btn-info">
-		<i class="icon-white icon-plus"></i> 
-		Add new document
-	</a>
+    <div class="row">
+    {% block headline %}
+        <h1 class="span12">{{ 'documents.title'|trans({},'MDBDocumentBundle')}}
+            <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">{{ 'button.actions'|trans({},'MDBDocumentBundle')}}
+            <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="{{ url('mdb_document_document_new') }}"><i class="icon icon-plus"></i> {{ 'button.new'|trans({},'MDBDocumentBundle') }}</a></li>
+                <li class="divider"></li>
+                <li><a href="#notyet" role="button" data-toggle="modal"><i class="icon-bar-chart"></i>  {{ 'button.report'|trans({},'MDBDocumentBundle') }}</a></li>
+                <li><a href="#notyet" role="button" data-toggle="modal"><i class="icon-download-alt"></i> {{ 'button.export'|trans({},'MDBDocumentBundle') }}</a></li>
+            </ul>
+        </div>
 
-	<form class="form-search" id="document-search" action="{{ path("mdb_document_document_index") }}" method="get" >
-		<div class="input-append">
-			<input type="text" name="q" class="span2 search-query">
-			<button type="submit" class="btn">Search</button>
-		</div> 
-	</form>
+        </h1>
+    {% endblock headline %}
+    </div>
+{% endblock page_header %}
 
-</div>
-{% endblock %}
 
-{% block content_row %}
-<div class="span12">
-	{% for document in documents %}
+{% block content %}
+<div class="tableplus" id="workorders">
+    <div class="span12 filters-container">
+        <div class="navbar navbar-table">     
+            <div class="navbar-inner" id="filters">
+			    <form class="form-search navbar-search pull-right" action="#" method="GET">
+			        <span class="input-append">
+			            <input class="search-query" name="q" id="q" autocomplete="off" placeholder="{{ 'workorder.search.placeholder'|trans({},'MDBWorkorderBundle') }}" type="text">
+			            <button id="search" type="submit" class="btn">{{ 'button.search'|trans({},'MDBDocumentBundle') }}</button>
+			        </span>
+			    </form>
+            </div>
+        </div>
+     </div>
+    <table class="table table-hover table-bordered span12">
+        <thead id="thead"><!-- insert thead --></thead>
+        <tbody id="list-workorders"><!-- insert workorders --></tbody>
+    </table>   
+    {% for document in documents %}
 		{% include 'MDBDocumentBundle:Document:index_item.html.twig' with {'document':document} %}
 	{% endfor %}
+    <div class="span12">
+        <div class="row" id="pagination"><!-- insert pagination here --></div>
+    </div>
 </div>
 {% endblock %}

@@ -1,4 +1,11 @@
 document:
+    search:
+        placeholder: search...
+    index:
+        column: 
+            title: Details
+            version: Version 
+            preview: Preview
     show:
         actions: Actions
         filename: Filename
@@ -12,7 +19,15 @@ document:
     confirm_delete: Are you sure you want to delete this document (this cannot be undone)?
     unlink: 
         message: Are you sure you want to remove this attachment?
-    form:
-        actions:
-            add: Add
-            close: Close 
+
+documents:
+    title: Documents
+
+button:
+    actions: Actions 
+    new: New
+    edit: Edit 
+    close: Close 
+    report: Report 
+    export: Export 
+    search: Search 
