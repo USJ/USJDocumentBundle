@@ -6,6 +6,9 @@ document:
             title: Details
             version: Version 
             preview: Preview
+    filters:
+        all: All
+        tags: Tags 
     show:
         actions: Actions
         filename: Filename

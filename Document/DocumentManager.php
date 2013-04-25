@@ -27,8 +27,21 @@ class DocumentManager extends BaseDocumentManager
 
         $this->dm = $dm;
         $this->class = $class;
-        $this->repository = $this->dm->getRepository($class);
+        $this->repository = $this->getRepository();
         $this->linkClass = $linkClass;
+    }
+
+    /**
+     * Return the repository used by this manager
+     *
+     * @return DocumentRepository
+     */
+    public function getRepository()
+    {
+        if(!$this->repository) {
+            return $this->dm->getRepository($this->class);
+        }
+        return $this->repository;
     }
 
     /**
@@ -40,7 +53,7 @@ class DocumentManager extends BaseDocumentManager
         return $document;
     }
 
-    public function deleteDocument($document)
+    public function deleteDocument(\MDB\DocumentBundle\Document\Document $document)
     {
         $this->dm->remove($document);
         $this->dm->flush();
@@ -101,11 +114,6 @@ class DocumentManager extends BaseDocumentManager
     public function findAllDocuments()
     {
         return $this->repository->findAll();
-    }
-
-    public function getRepository()
-    {
-        return $this->repository;
     }
 
     public function getDocumentManager()

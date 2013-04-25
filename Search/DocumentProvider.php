@@ -1,9 +1,8 @@
-<?php 
+<?php
 
 namespace MDB\DocumentBundle\Search;
 
-use FOQ\ElasticaBundle\Doctrine\AbstractProvider;
-use FOQ\ElasticaBundle\Provider\ProviderInterface;
+use FOS\ElasticaBundle\Provider\ProviderInterface;
 use Elastica_Document;
 
 class DocumentProvider implements ProviderInterface
@@ -56,7 +55,7 @@ class DocumentProvider implements ProviderInterface
 
         $objects = array();
 
-        foreach($docs as $doc) {
+        foreach ($docs as $doc) {
 
             $document = new Elastica_Document(
                 $doc->getId(),
@@ -69,9 +68,9 @@ class DocumentProvider implements ProviderInterface
                 "mdb_document"
              );
 
-
             $objects[] = $document;
        }
+
        return $objects;
     }
 

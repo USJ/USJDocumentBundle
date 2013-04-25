@@ -60,6 +60,16 @@ class Document
      */
     protected $links;
 
+    /**
+     * @MongoDB\Collection
+     */
+    protected $tags = array();
+
+    /**
+     * @MongoDB\Boolean
+     */
+    protected $featured;
+
     public function __construct()
     {
         // using ArrayCollection, is better, the Form can be handle properly
@@ -315,7 +325,6 @@ class Document
         return $this->updatedBy;
     }
 
-
     /**
      * Add links
      *
@@ -324,5 +333,43 @@ class Document
     public function addLinks(\MDB\DocumentBundle\Document\Link $links)
     {
         $this->links[] = $links;
+    }
+
+    /**
+     * Set tags
+     *
+     * @param array $tags
+     * @return Document
+     */
+    public function setTags($tags)
+    {
+        return $this->tags = $tags;
+    }
+
+    /**
+     * Get tags
+     *
+     * @return array $tags
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    public function isFeatured()
+    {
+        return $this->featured;
+    }
+
+    public function setFeatured($bool)
+    {
+        $this->featured = $bool;
+        return $this;
+    }
+
+    public function isImage()
+    {   
+        $type = explode('/',$this->files[0]->getMimeType());
+        return ($type[0] == 'image') ? true : false;
     }
 }

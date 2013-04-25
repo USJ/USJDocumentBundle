@@ -17,9 +17,9 @@ class PreLinkedDocumentType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('title', 'text',array('required' => false, 'label_render' => false ));
+        $builder->add('title', 'text',array('required' => false));
 
-        $builder->add('description', 'textarea',array('required' => false, 'label_render' => false));
+        $builder->add('description', 'textarea',array('required' => false));
 
         $builder->add('files', 'collection', array(
             'by_reference' => false, // set false to use adder/remover instead 
@@ -27,6 +27,12 @@ class PreLinkedDocumentType extends AbstractType
             'allow_add' => true,
             'allow_delete' => false
         ));
+
+        $transformer = new \MDB\DocumentBundle\Form\DataTransformer\StringToTagsTransformer();
+        $builder->add(
+            $builder->create('tags', 'hidden', array('required' => false))
+                ->addModelTransformer($transformer)
+            );
 
         $builder->add('links', 'collection', array(
             'by_reference' => false, // set false to use adder/remover instead 
