@@ -1,7 +1,6 @@
 <?php
 namespace MDB\DocumentBundle\Document;
 
-use Doctrine\ODM\MongoDB\DocumentManager as ODMDocumentManager ;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use MDB\DocumentBundle\Model\DocumentManager as BaseDocumentManager;
 use MDB\DocumentBundle\Events;
@@ -38,9 +37,10 @@ class DocumentManager extends BaseDocumentManager
      */
     public function getRepository()
     {
-        if(!$this->repository) {
+        if (!$this->repository) {
             return $this->dm->getRepository($this->class);
         }
+
         return $this->repository;
     }
 
@@ -50,6 +50,7 @@ class DocumentManager extends BaseDocumentManager
     public function createDocument()
     {
         $document = new $this->class;
+
         return $document;
     }
 
@@ -70,13 +71,13 @@ class DocumentManager extends BaseDocumentManager
         // find the link object
         $document->removeLink($link);
 
-        if(!$originalLinkCount > count($document->getLinks())) {
+        if (!$originalLinkCount > count($document->getLinks())) {
             throw new \RuntimeException("Document unlink failed");
         }
 
         $this->saveDocument($document);
 
-        if(count($document->getLinks()) < 1) {
+        if (count($document->getLinks()) < 1) {
             $this->removeDocument($document);
         }
     }
@@ -84,7 +85,7 @@ class DocumentManager extends BaseDocumentManager
     public function linkObject(\MDB\DocumentBundle\Document\Document $document, $object)
     {
         $objectClass = get_class($object);
-        if(!$this->isMappedClass($objectClass)) {
+        if (!$this->isMappedClass($objectClass)) {
             throw new \RuntimeException(sprintf("%s class was not mapped, cannot use for linking.", $objectClass));
         }
         $this->doLinkObject($document, $object);
@@ -93,7 +94,7 @@ class DocumentManager extends BaseDocumentManager
     public function createPreLinkedDocument($object)
     {
         $objectClass = get_class($object);
-        if(!$this->isMappedClass($objectClass)) {
+        if (!$this->isMappedClass($objectClass)) {
             throw new \RuntimeException(sprintf("%s class was not mapped, cannot use for linking.", $objectClass));
         }
 
@@ -149,7 +150,7 @@ class DocumentManager extends BaseDocumentManager
             ->getMetadataDriverImpl()
             ->getAllClassNames();
 
-        if(!in_array($class, $classNames)) {
+        if (!in_array($class, $classNames)) {
             return false;
         }
 

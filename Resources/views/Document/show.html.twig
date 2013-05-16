@@ -1,12 +1,12 @@
 {% extends 'MDBDocumentBundle::layout.html.twig' %}
 
 {% block title %}
-    {{ parent() }} | 
-    {{ document.title}} | ver. {{ file.version }}    
+    {{ parent() }} |
+    {{ document.title}} | ver. {{ file.version }}
 {% endblock %}
 
 {% block headline %}
-    {{ document.title }} 
+    {{ document.title }}
 
     <!-- <div class="span3"> -->
         <form action="{{ path('mdb_document_document_files', {'documentId': document.id }) }}"  method="POST" {{ form_enctype(fileForm) }}>

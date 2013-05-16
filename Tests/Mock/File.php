@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Tests\Mock;
 
 use MDB\DocumentBundle\Model\FileInterface;
@@ -6,19 +6,19 @@ use MDB\DocumentBundle\Model\FileInterface;
 class MockFile implements FileInterface
 {
     protected $id;
- 
+
     protected $file;
- 
+
     protected $filename;
- 
+
     protected $mimeType;
- 
+
     protected $uploadDate;
- 
+
     protected $length;
- 
+
     protected $chunkSize;
- 
+
     protected $md5;
 
     protected $changeMessage;
@@ -27,16 +27,15 @@ class MockFile implements FileInterface
 
     protected $format;
 
-
     public function getId()
     {
         return $this->id;
     }
 
-
     public function setFile($file)
     {
         $this->file = $file;
+
         return $this;
     }
 
@@ -48,6 +47,7 @@ class MockFile implements FileInterface
     public function setFilename($filename)
     {
         $this->filename = $filename;
+
         return $this;
     }
 
@@ -59,35 +59,33 @@ class MockFile implements FileInterface
     public function setMimeType($mimeType)
     {
         $this->mimeType = $mimeType;
+
         return $this;
     }
-
 
     public function getMimeType()
     {
         return $this->mimeType;
     }
 
- 
     public function setUploadDate($uploadDate)
     {
         $this->uploadDate = $uploadDate;
+
         return $this;
     }
-
 
     public function getUploadDate()
     {
         return $this->uploadDate;
     }
 
-
     public function setLength($length)
     {
         $this->length = $length;
+
         return $this;
     }
-
 
     public function getLength()
     {
@@ -97,9 +95,9 @@ class MockFile implements FileInterface
     public function setChunkSize($chunkSize)
     {
         $this->chunkSize = $chunkSize;
+
         return $this;
     }
-
 
     public function getChunkSize()
     {
@@ -109,9 +107,9 @@ class MockFile implements FileInterface
     public function setMd5($md5)
     {
         $this->md5 = $md5;
+
         return $this;
     }
-
 
     public function getMd5()
     {
@@ -121,6 +119,7 @@ class MockFile implements FileInterface
     public function setChangeMessage($changeMessage)
     {
         $this->changeMessage = $changeMessage;
+
         return $this;
     }
 
@@ -132,13 +131,12 @@ class MockFile implements FileInterface
     public function setVersion($version)
     {
         $this->version = $version;
+
         return $this;
     }
-
 
     public function getVersion()
     {
         return $this->version;
     }
 }
-

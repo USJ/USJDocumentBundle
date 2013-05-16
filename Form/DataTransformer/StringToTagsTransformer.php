@@ -2,7 +2,6 @@
 namespace MDB\DocumentBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
-use Symfony\Component\Form\Exception\TransformationFailedException;
 
 /**
 *
@@ -17,9 +16,10 @@ class StringToTagsTransformer implements DataTransformerInterface
      */
     public function transform($array)
     {
-        if(is_null($array)) {
+        if (is_null($array)) {
             return '';
         }
+
         return implode(',', $array);
     }
 
@@ -31,10 +31,11 @@ class StringToTagsTransformer implements DataTransformerInterface
      */
     public function reverseTransform($string)
     {
-        if(is_null($string)) {
+        if (is_null($string)) {
             return array();
         }
         $arr = explode(',', $string);
+
         return ($arr)? $arr: array();
     }
 }

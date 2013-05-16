@@ -13,7 +13,6 @@ class DocumentSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('must be revisited.');
 
-
         $document = new MockDocument();
         $file = new MockFile();
         $document->addFile($file);
@@ -27,7 +26,6 @@ class DocumentSubscriberTest extends \PHPUnit_Framework_TestCase
     public function testVersioningWithPresettedVersion()
     {
         $this->markTestSkipped('must be revisited.');
-
 
         $document = new MockDocument();
         $file = new MockFile();
@@ -47,7 +45,6 @@ class DocumentSubscriberTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestSkipped('must be revisited.');
 
-
         $document = new MockDocument();
         $file1 = new MockFile();
         $file1->setVersion(1);
@@ -58,7 +55,6 @@ class DocumentSubscriberTest extends \PHPUnit_Framework_TestCase
         $document->addFile($file1);
         $document->addFile($file2);
         $document->addFile($newFile);
-
 
         $documentSubscriber = new DocumentSubscriber();
         $documentSubscriber->setFileVersion(new DocumentEvent($document));
@@ -80,6 +76,7 @@ class MockFile
     public function setVersion($version)
     {
         $this->version = $version;
+
         return $this;
     }
 }
@@ -96,6 +93,7 @@ class MockDocument
     public function addFile($file)
     {
         $this->files[] = $file;
+
         return $this;
     }
 }

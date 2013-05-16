@@ -1,14 +1,12 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 
 use MDB\DocumentBundle\Form\DataTransformer\MongoIdToStringTransformer;
 /**
- * 
+ *
  */
 class LinkType extends AbstractType
 {
@@ -26,7 +24,7 @@ class LinkType extends AbstractType
                 $builder->create('objectId', 'hidden')
                     ->addViewTransformer(new MongoIdToStringTransformer())
             );
-        
+
         $builder->add('class', 'hidden');
     }
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType,
@@ -8,7 +8,7 @@ use Symfony\Component\Form\AbstractType,
 
 class PreLinkedDocumentType extends AbstractType
 {
-    protected $documentClass;  
+    protected $documentClass;
 
     public function __construct($documentClass)
     {
@@ -22,7 +22,7 @@ class PreLinkedDocumentType extends AbstractType
         $builder->add('description', 'textarea',array('required' => false));
 
         $builder->add('files', 'collection', array(
-            'by_reference' => false, // set false to use adder/remover instead 
+            'by_reference' => false, // set false to use adder/remover instead
             'type' => 'mdb_document_file',
             'allow_add' => true,
             'allow_delete' => false
@@ -35,7 +35,7 @@ class PreLinkedDocumentType extends AbstractType
             );
 
         $builder->add('links', 'collection', array(
-            'by_reference' => false, // set false to use adder/remover instead 
+            'by_reference' => false, // set false to use adder/remover instead
             'type' => 'mdb_document_link',
             'allow_add' => true,
             'allow_delete' => false
@@ -47,7 +47,7 @@ class PreLinkedDocumentType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => $this->documentClass,
             'cascade_validation' => true
-        ));        
+        ));
     }
 
     public function getName()

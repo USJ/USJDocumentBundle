@@ -1,8 +1,8 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Form\Factory;
 
 /**
- * 
+ *
  */
 use Symfony\Component\Form\FormFactoryInterface;
 

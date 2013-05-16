@@ -2,40 +2,40 @@ document:
     search:
         placeholder: search...
     index:
-        column: 
+        column:
             title: Details
-            version: Version 
+            version: Version
             preview: Preview
     filters:
         all: All
-        tags: Tags 
+        tags: Tags
     show:
         actions: Actions
         filename: Filename
-        upload_date: Upload date 
-        uploaded_by: Submitted by 
+        upload_date: Upload date
+        uploaded_by: Submitted by
         empty_description: Empty description
     version:
-        title: Version 
-        add: Add a new version 
-    delete: Delete 
+        title: Version
+        add: Add a new version
+    delete: Delete
     confirm_delete: Are you sure you want to delete this document (this cannot be undone)?
-    unlink: 
+    unlink:
         message: Are you sure you want to remove this attachment?
 
     form:
         actions:
-            close: Close 
-            add: Add 
+            close: Close
+            add: Add
 
 documents:
     title: Documents
 
 button:
-    actions: Actions 
+    actions: Actions
     new: New
-    edit: Edit 
-    close: Close 
-    report: Report 
-    export: Export 
-    search: Search 
+    edit: Edit
+    close: Close
+    report: Report
+    export: Export
+    search: Search

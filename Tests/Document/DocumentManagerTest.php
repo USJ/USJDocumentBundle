@@ -1,11 +1,10 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Tests\Document;
 
 use MDB\DocumentBundle\Document\Document;
-use MDB\DocumentBundle\Document\DocumentManager;
 
 /**
-* 
+*
 */
 class DocumentManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +12,7 @@ class DocumentManagerTest extends \PHPUnit_Framework_TestCase
     {
         // bootstrap new document
     }
-    
+
     public function testLinkingDocumentWithObject()
     {
 

@@ -84,5 +84,5 @@ services:
     # mdb_document.search_provider.document:
     #     class: MDB\DocumentBundle\Search\DocumentProvider
     #     arguments: [ @foq_elastica.index.mdb_document.document ]
-    #     tags: 
+    #     tags:
     #         - { name: foq_elastica.provider, index: mdb_document, type: document}

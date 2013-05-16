@@ -89,12 +89,13 @@ class Document
     /**
      * Set description
      *
-     * @param string $description
+     * @param  string   $description
      * @return Document
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -111,12 +112,13 @@ class Document
     /**
      * Set title
      *
-     * @param string $title
+     * @param  string   $title
      * @return Document
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
         return $this;
     }
 
@@ -129,7 +131,6 @@ class Document
     {
         return $this->title;
     }
-
 
     /**
      * Add files
@@ -149,6 +150,7 @@ class Document
     public function setFiles($files)
     {
         $this->files = $files;
+
         return $this;
     }
 
@@ -168,26 +170,29 @@ class Document
     public function getRawFile()
     {
         $file = end($this->files);
+
         return $file->getFile()->getBytes();
     }
 
     public function getFile($version = null)
     {
-        if(!is_null($version)) {
-            foreach($this->files as $file) {
-                if($file->getVersion() == $version ){
+        if (!is_null($version)) {
+            foreach ($this->files as $file) {
+                if ($file->getVersion() == $version ) {
                     return $file;
                 }
             }
         }
+
         return $this->files->last();
     }
 
     public function getEncodedFile()
     {
-        if(end($this->files)) {
+        if (end($this->files)) {
             return end($this->files)->getEncodedFile();
         }
+
         return '';
     }
 
@@ -199,12 +204,13 @@ class Document
     /**
      * Set createAt
      *
-     * @param timestamp $createAt
+     * @param  timestamp $createAt
      * @return \Document
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -236,6 +242,7 @@ class Document
     public function setLinks($links)
     {
         $this->links = $links;
+
         return $this;
     }
 
@@ -262,12 +269,13 @@ class Document
     /**
      * Set updatedAt
      *
-     * @param timestamp $updatedAt
+     * @param  timestamp $updatedAt
      * @return \Document
      */
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
@@ -284,12 +292,13 @@ class Document
     /**
      * Set createdBy
      *
-     * @param string $createdBy
+     * @param  string    $createdBy
      * @return \Document
      */
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+
         return $this;
     }
 
@@ -306,12 +315,13 @@ class Document
     /**
      * Set updatedBy
      *
-     * @param string $updatedBy
+     * @param  string    $updatedBy
      * @return \Document
      */
     public function setUpdatedBy($updatedBy)
     {
         $this->updatedBy = $updatedBy;
+
         return $this;
     }
 
@@ -338,7 +348,7 @@ class Document
     /**
      * Set tags
      *
-     * @param array $tags
+     * @param  array    $tags
      * @return Document
      */
     public function setTags($tags)
@@ -364,12 +374,14 @@ class Document
     public function setFeatured($bool)
     {
         $this->featured = $bool;
+
         return $this;
     }
 
     public function isImage()
-    {   
+    {
         $type = explode('/',$this->files[0]->getMimeType());
+
         return ($type[0] == 'image') ? true : false;
     }
 }

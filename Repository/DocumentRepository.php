@@ -13,10 +13,10 @@ use Doctrine\ODM\MongoDB\DocumentRepository as ODMDocumentRepository;
 class DocumentRepository extends ODMDocumentRepository
 {
     public function createIsActiveQueryBuilder()
-    { 
+    {
         return $this->createQueryBuilder('MDB\DocumentBundle\Document\Document');
     }
-    
+
     public function findDocumentsByClassAndObjectId($className, $objectId)
     {
         if(!$objectId instanceof \MongoId)
@@ -29,5 +29,4 @@ class DocumentRepository extends ODMDocumentRepository
             ->execute();
     }
 
-    
 }

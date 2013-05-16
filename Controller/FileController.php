@@ -1,14 +1,11 @@
 <?php
 namespace MDB\DocumentBundle\Controller;
- 
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 use MDB\DocumentBundle\Document\File;
-use MDB\DocumentBundle\Form\Type\DocumentType;
 
 class FileController extends Controller
 {
@@ -30,11 +27,11 @@ class FileController extends Controller
             ->getRepository("MDBDocumentBundle:File");
 
         $file;
-        if(isset($qId)) {
+        if (isset($qId)) {
             $file = $fileRepo->findOneById($qId);
-        }elseif(isset($qFilename)){
+        } elseif (isset($qFilename)) {
             $file = $fileRepo->findOneByFilename($qFilename);
-        }        
+        }
 
         if (!isset($file)) {
             throw $this->createNotFoundException(sprintf('File with "%s" could not be found', $qId));

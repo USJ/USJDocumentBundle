@@ -1,75 +1,75 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Document;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use MDB\DocumentBundle\Model\File as BaseFile;
 
-/** 
+/**
  * @MongoDB\MappedSuperclass
  */
 class File extends BaseFile
 {
-    /** 
-    * @MongoDB\Id 
+    /**
+    * @MongoDB\Id
     */
     protected $id;
 
-    /** 
+    /**
      * GridFSFile class
      * @MongoDB\File
      */
     protected $file;
- 
-    /** 
-     * @MongoDB\String 
+
+    /**
+     * @MongoDB\String
      */
     protected $filename;
- 
-    /** 
-     * @MongoDB\String 
+
+    /**
+     * @MongoDB\String
      */
     protected $mimeType;
- 
-    /** 
+
+    /**
      * @Gedmo\Timestampable(on="create")
      * @MongoDB\Timestamp
      */
     protected $createdAt;
- 
+
     /**
      * @MongoDB\String
      * @Gedmo\Blameable(on="create")
      */
     protected $uploadedBy;
-    
-    /** 
+
+    /**
      * @MongoDB\Int
      */
     protected $length;
- 
-    /** 
-     * @MongoDB\Int 
+
+    /**
+     * @MongoDB\Int
      */
     protected $chunkSize;
- 
-    /** 
-     * @MongoDB\String 
+
+    /**
+     * @MongoDB\String
      */
     protected $md5;
 
-    /** 
-     * @MongoDB\String 
+    /**
+     * @MongoDB\String
      */
     protected $changeMessage;
 
-    /** 
-     * @MongoDB\Int 
+    /**
+     * @MongoDB\Int
      */
     protected $version;
 
-    /** 
-     * @MongoDB\String 
+    /**
+     * @MongoDB\String
      */
     protected $format;
 
@@ -86,16 +86,16 @@ class File extends BaseFile
     /**
      * Set file
      *
-     * @param file $file
+     * @param  file $file
      * @return File
      */
     public function setFile($file)
     {
-        if($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+        if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
             $this->file = $file->getPathname();
             $this->setFilename($file->getClientOriginalName());
             $this->setMimeType($file->getClientMimeType());
-        }else{
+        } else {
             $this->file = $file;
         }
 
@@ -115,12 +115,13 @@ class File extends BaseFile
     /**
      * Set filename
      *
-     * @param string $filename
+     * @param  string $filename
      * @return File
      */
     public function setFilename($filename)
     {
         $this->filename = $filename;
+
         return $this;
     }
 
@@ -137,12 +138,13 @@ class File extends BaseFile
     /**
      * Set mimeType
      *
-     * @param string $mimeType
+     * @param  string $mimeType
      * @return File
      */
     public function setMimeType($mimeType)
     {
         $this->mimeType = $mimeType;
+
         return $this;
     }
 
@@ -156,16 +158,16 @@ class File extends BaseFile
         return $this->mimeType;
     }
 
-
     /**
      * Set length
      *
-     * @param int $length
+     * @param  int  $length
      * @return File
      */
     public function setLength($length)
     {
         $this->length = $length;
+
         return $this;
     }
 
@@ -182,12 +184,13 @@ class File extends BaseFile
     /**
      * Set chunkSize
      *
-     * @param int $chunkSize
+     * @param  int  $chunkSize
      * @return File
      */
     public function setChunkSize($chunkSize)
     {
         $this->chunkSize = $chunkSize;
+
         return $this;
     }
 
@@ -204,12 +207,13 @@ class File extends BaseFile
     /**
      * Set md5
      *
-     * @param string $md5
+     * @param  string $md5
      * @return File
      */
     public function setMd5($md5)
     {
         $this->md5 = $md5;
+
         return $this;
     }
 
@@ -226,12 +230,13 @@ class File extends BaseFile
     /**
      * Set changeMessage
      *
-     * @param string $changeMessage
+     * @param  string $changeMessage
      * @return File
      */
     public function setChangeMessage($changeMessage)
     {
         $this->changeMessage = $changeMessage;
+
         return $this;
     }
 
@@ -248,12 +253,13 @@ class File extends BaseFile
     /**
      * Set version
      *
-     * @param int $version
+     * @param  int  $version
      * @return File
      */
     public function setVersion($version)
     {
         $this->version = $version;
+
         return $this;
     }
 
@@ -269,6 +275,7 @@ class File extends BaseFile
     public function getEncodedFile()
     {
         $raw=$this->getFile()->getBytes();
+
         return base64_encode($raw);
     }
 
@@ -280,12 +287,13 @@ class File extends BaseFile
     /**
      * Set format
      *
-     * @param string $format
+     * @param  string $format
      * @return \File
      */
     public function setFormat($format)
     {
         $this->format = $format;
+
         return $this;
     }
 
@@ -307,24 +315,26 @@ class File extends BaseFile
     /**
      * Set document
      *
-     * @param MDB\DocumentBundle\Document\Document $document
+     * @param  MDB\DocumentBundle\Document\Document $document
      * @return \File
      */
     public function setDocument(\MDB\DocumentBundle\Document\Document $document)
     {
         $this->document = $document;
+
         return $this;
     }
 
     /**
      * Set createdAt
      *
-     * @param timestamp $createdAt
+     * @param  timestamp $createdAt
      * @return \File
      */
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
@@ -341,12 +351,13 @@ class File extends BaseFile
     /**
      * Set uploadedBy
      *
-     * @param string $uploadedBy
+     * @param  string $uploadedBy
      * @return \File
      */
     public function setUploadedBy($uploadedBy)
     {
         $this->uploadedBy = $uploadedBy;
+
         return $this;
     }
 

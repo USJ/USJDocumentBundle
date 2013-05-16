@@ -1,29 +1,29 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/** 
+/**
  * This store the link to other object model.
  * @MongoDB\MappedSuperclass
  */
 class Link
 {
-    /** 
-     * @MongoDB\Id 
+    /**
+     * @MongoDB\Id
      */
     protected $id;
 
-    /** 
+    /**
      * @Assert\NotNull
      * @MongoDB\String
      */
     protected $class;
 
-    /** 
+    /**
      * @Assert\NotNull
-     * @MongoDB\ObjectId 
+     * @MongoDB\ObjectId
      */
     protected $objectId;
 
@@ -46,12 +46,13 @@ class Link
     /**
      * Set className
      *
-     * @param string $className
+     * @param  string     $className
      * @return \Belonging
      */
     public function setClass($class)
     {
         $this->class = $class;
+
         return $this;
     }
 
@@ -68,16 +69,17 @@ class Link
     /**
      * Set objectId
      *
-     * @param string|MongoId $objectId
+     * @param  string|MongoId $objectId
      * @return \Belonging
      */
     public function setObjectId($objectId)
     {
-        if(!$objectId instanceof \MongoId) {
+        if (!$objectId instanceof \MongoId) {
             $objectId = new \MongoId($objectId);
         }
 
         $this->objectId = $objectId;
+
         return $this;
     }
 

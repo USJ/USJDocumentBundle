@@ -1,15 +1,15 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Tests\Document;
 
 use MDB\DocumentBundle\Document\Document;
 use MDB\DocumentBundle\Document\Link;
 
 /**
-* 
+*
 */
 class DocumentTest extends \PHPUnit_Framework_TestCase
 {
-    
+
     public function testRemoveLink()
     {
         $document = new Document();

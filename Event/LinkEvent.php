@@ -7,7 +7,6 @@ use MDB\DocumentBundle\Document\Link;
 use MDB\DocumentBundle\Document\Document;
 use Symfony\Component\EventDispatcher\Event;
 
-
 /**
 *
 */

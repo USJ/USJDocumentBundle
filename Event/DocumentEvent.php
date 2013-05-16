@@ -1,9 +1,9 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Event;
 
 use Symfony\Component\EventDispatcher\Event;
 /**
-* 
+*
 */
 class DocumentEvent extends Event
 {

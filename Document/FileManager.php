@@ -1,9 +1,9 @@
-<?php 
+<?php
 namespace MDB\DocumentBundle\Document;
 
 use MDB\DocumentBundle\Model\FileManager as BaseFileManager;
 /**
-* 
+*
 */
 class FileManager extends BaseFileManager
 {
@@ -11,25 +11,25 @@ class FileManager extends BaseFileManager
     protected $dm;
     protected $repository;
 
-
     public function __construct($dispatcher, $dm, $fileClass)
     {
         $this->fileClass = $fileClass;
-        $this->dm = $dm;  
+        $this->dm = $dm;
         $this->repository = $this->dm->getRepository($fileClass);
     }
-    
+
     public function createFile($uploadedFile = null)
     {
         $class = $this->fileClass;
 
-        if(!is_null($uploadedFile) && $uploadedFile instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+        if (!is_null($uploadedFile) && $uploadedFile instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
             $file = new $class;
             $file->setFile($uploadedFile);
+
             return $file;
         }
-        
-        return new $class;        
+
+        return new $class;
     }
 
     public function findFileById($id)
@@ -41,7 +41,6 @@ class FileManager extends BaseFileManager
     {
         return $this->repository->findOneByFilename($filename);
     }
-
 
     public function isNewFile($file)
     {
