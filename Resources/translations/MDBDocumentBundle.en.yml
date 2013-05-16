@@ -23,6 +23,11 @@ document:
     unlink: 
         message: Are you sure you want to remove this attachment?
 
+    form:
+        actions:
+            close: Close 
+            add: Add 
+
 documents:
     title: Documents
 
