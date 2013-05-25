@@ -11,16 +11,16 @@ use MDB\DocumentBundle\Event\LinkEvent;
 */
 class DocumentManager extends BaseDocumentManager
 {
-    /** @var ODM MongoDB Document Manager */
+    /** @var Doctrine\ODM\MongoDB\DocumentManager MongoDB Document Manager */
     protected $dm;
-    /** @var class  */
+    /** @var string  */
     protected $class;
 
     protected $repository;
 
     protected $linkClass;
 
-    public function __construct(EventDispatcherInterface $dispatcher, ODMDocumentManager $dm, $class, $linkClass)
+    public function __construct(EventDispatcherInterface $dispatcher, $dm, $class, $linkClass)
     {
         parent::__construct($dispatcher);
 
@@ -33,7 +33,7 @@ class DocumentManager extends BaseDocumentManager
     /**
      * Return the repository used by this manager
      *
-     * @return DocumentRepository
+     * @return Doctrine\ODM\MongoDB\DocumentRepository
      */
     public function getRepository()
     {
