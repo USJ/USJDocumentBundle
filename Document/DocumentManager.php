@@ -5,6 +5,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use MDB\DocumentBundle\Model\DocumentManager as BaseDocumentManager;
 use MDB\DocumentBundle\Events;
 use MDB\DocumentBundle\Event\LinkEvent;
+use Doctrine\ODM\MongoDB\DocumentManager as ODMDocumentManager;
 
 /**
 * Class act as a service to access documents
@@ -18,16 +19,13 @@ class DocumentManager extends BaseDocumentManager
 
     protected $repository;
 
-    protected $linkClass;
-
-    public function __construct(EventDispatcherInterface $dispatcher, ODMDocumentManager $dm, $class, $linkClass)
+    public function __construct(EventDispatcherInterface $dispatcher, ODMDocumentManager $dm, $class)
     {
         parent::__construct($dispatcher);
 
         $this->dm = $dm;
         $this->class = $class;
         $this->repository = $this->getRepository();
-        $this->linkClass = $linkClass;
     }
 
     /**
@@ -60,36 +58,36 @@ class DocumentManager extends BaseDocumentManager
         $this->dm->flush();
     }
 
-    public function findDocumentsByLink(Link $link)
-    {
-        return $this->repository->findDocumentsByClassAndObjectId($link->getClass(), $link->getObjectId());
-    }
+    // public function findDocumentsByLink(Link $link)
+    // {
+    //     return $this->repository->findDocumentsByClassAndObjectId($link->getClass(), $link->getObjectId());
+    // }
 
-    public function unlinkObject($document, $link)
-    {
-        $originalLinkCount = count($document->getLinks());
-        // find the link object
-        $document->removeLink($link);
+    // public function unlinkObject($document, $link)
+    // {
+    //     $originalLinkCount = count($document->getLinks());
+    //     // find the link object
+    //     $document->removeLink($link);
 
-        if (!$originalLinkCount > count($document->getLinks())) {
-            throw new \RuntimeException("Document unlink failed");
-        }
+    //     if (!$originalLinkCount > count($document->getLinks())) {
+    //         throw new \RuntimeException("Document unlink failed");
+    //     }
 
-        $this->saveDocument($document);
+    //     $this->saveDocument($document);
 
-        if (count($document->getLinks()) < 1) {
-            $this->removeDocument($document);
-        }
-    }
+    //     if (count($document->getLinks()) < 1) {
+    //         $this->removeDocument($document);
+    //     }
+    // }
 
-    public function linkObject(\MDB\DocumentBundle\Document\Document $document, $object)
-    {
-        $objectClass = get_class($object);
-        if (!$this->isMappedClass($objectClass)) {
-            throw new \RuntimeException(sprintf("%s class was not mapped, cannot use for linking.", $objectClass));
-        }
-        $this->doLinkObject($document, $object);
-    }
+    // public function linkObject(\MDB\DocumentBundle\Document\Document $document, $object)
+    // {
+    //     $objectClass = get_class($object);
+    //     if (!$this->isMappedClass($objectClass)) {
+    //         throw new \RuntimeException(sprintf("%s class was not mapped, cannot use for linking.", $objectClass));
+    //     }
+    //     $this->doLinkObject($document, $object);
+    // }
 
     public function createPreLinkedDocument($object)
     {
@@ -122,20 +120,20 @@ class DocumentManager extends BaseDocumentManager
         return $this->dm;
     }
 
-    protected function doLinkObject($document, $object)
-    {
-        $link = new $this->linkClass;
-        $link->setClass(get_class($object))
-            ->setObjectId($object->getId());
+    // protected function doLinkObject($document, $object)
+    // {
+    //     $link = new $this->linkClass;
+    //     $link->setClass(get_class($object))
+    //         ->setObjectId($object->getId());
 
-        $this->dispatcher->dispatch(new LinkEvent($link), Events::DOCUMENT_PRE_LINK );
+    //     $this->dispatcher->dispatch(new LinkEvent($link), Events::DOCUMENT_PRE_LINK );
 
-        $document->addLink($link);
-        $this->doSaveDocument($document);
+    //     $document->addLink($link);
+    //     $this->doSaveDocument($document);
 
-        $this->dispatcher->dispatch(new LinkEvent($link), Events::DOCUMENT_POST_LINK );
+    //     $this->dispatcher->dispatch(new LinkEvent($link), Events::DOCUMENT_POST_LINK );
 
-    }
+    // }
 
     protected function doSaveDocument($document)
     {

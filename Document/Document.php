@@ -11,17 +11,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Document
 {
     /**
-     * @MongoDB\Id
-     */
-    protected $id;
-
-    /**
-     * @MongoDB\ReferenceMany(targetDocument="File",cascade={"all"})
-     * @Assert\Count(min="1", minMessage="You must have uploaded one file.")
-     */
-    protected $files;
-
-    /**
      * @MongoDB\String
      */
     protected $description;
@@ -56,11 +45,6 @@ class Document
     protected $updatedBy;
 
     /**
-     * @MongoDB\EmbedMany(targetDocument="Link")
-     */
-    protected $links;
-
-    /**
      * @MongoDB\Collection
      */
     protected $tags = array();
@@ -70,21 +54,6 @@ class Document
      */
     protected $featured;
 
-    public function __construct()
-    {
-        // using ArrayCollection, is better, the Form can be handle properly
-        $this->files = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->links = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    /**
-     * Get id
-     *
-     * @return id $id
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * Set description
@@ -225,38 +194,6 @@ class Document
     }
 
     /**
-     * Add links
-     *
-     * @param MDB\DocumentBundle\Document\Link $links
-     */
-    public function addLink(\MDB\DocumentBundle\Document\Link $links)
-    {
-        $this->links->add($links);
-    }
-
-    public function removeLink(\MDB\DocumentBundle\Document\Link $linkToRemove)
-    {
-        $this->links->removeElement($linkToRemove);
-    }
-
-    public function setLinks($links)
-    {
-        $this->links = $links;
-
-        return $this;
-    }
-
-    /**
-     * Get links
-     *
-     * @return Doctrine\Common\Collections\Collection $links
-     */
-    public function getLinks()
-    {
-        return $this->links;
-    }
-
-    /**
      * Add files
      *
      * @param MDB\DocumentBundle\Document\File $files
@@ -333,16 +270,6 @@ class Document
     public function getUpdatedBy()
     {
         return $this->updatedBy;
-    }
-
-    /**
-     * Add links
-     *
-     * @param MDB\DocumentBundle\Document\Link $links
-     */
-    public function addLinks(\MDB\DocumentBundle\Document\Link $links)
-    {
-        $this->links[] = $links;
     }
 
     /**

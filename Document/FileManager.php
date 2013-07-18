@@ -24,7 +24,7 @@ class FileManager extends BaseFileManager
 
         if (!is_null($uploadedFile) && $uploadedFile instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
             $file = new $class;
-            $file->setFile($uploadedFile);
+            $file->setGridFsFile($uploadedFile);
 
             return $file;
         }

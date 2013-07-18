@@ -1,25 +1,21 @@
 <?php
 namespace MDB\DocumentBundle\Document;
 
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use MDB\DocumentBundle\Model\File as BaseFile;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @MongoDB\MappedSuperclass
  */
 class File extends BaseFile
 {
-    /**
-    * @MongoDB\Id
-    */
-    protected $id;
 
     /**
      * GridFSFile class
      * @MongoDB\File
      */
-    protected $file;
+    protected $gridFsFile;
 
     /**
      * @MongoDB\String
@@ -73,14 +69,10 @@ class File extends BaseFile
      */
     protected $format;
 
-    /**
-     * Get id
-     *
-     * @return id $id
-     */
-    public function getId()
+
+    public function setFile($file)
     {
-        return $this->id;
+        return $this->setGridFsFile($file);
     }
 
     /**
@@ -89,17 +81,22 @@ class File extends BaseFile
      * @param  file $file
      * @return File
      */
-    public function setFile($file)
+    public function setGridFsFile($file)
     {
         if ($file instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
-            $this->file = $file->getPathname();
+            $this->gridFsFile = $file->getPathname();
             $this->setFilename($file->getClientOriginalName());
             $this->setMimeType($file->getClientMimeType());
         } else {
-            $this->file = $file;
+            $this->gridFsFile = $file;
         }
 
         return $this;
+    }
+
+    public function getGridFsFile()
+    {
+        return $this->gridFsFile;
     }
 
     /**
@@ -109,7 +106,7 @@ class File extends BaseFile
      */
     public function getFile()
     {
-        return $this->file;
+        return $this->gridFsFile;
     }
 
     /**
@@ -272,6 +269,7 @@ class File extends BaseFile
     {
         return $this->version;
     }
+
     public function getEncodedFile()
     {
         $raw=$this->getFile()->getBytes();
@@ -310,19 +308,6 @@ class File extends BaseFile
     public function getDocument()
     {
         return $this->document;
-    }
-
-    /**
-     * Set document
-     *
-     * @param  MDB\DocumentBundle\Document\Document $document
-     * @return \File
-     */
-    public function setDocument(\MDB\DocumentBundle\Document\Document $document)
-    {
-        $this->document = $document;
-
-        return $this;
     }
 
     /**

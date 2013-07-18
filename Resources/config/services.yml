@@ -1,9 +1,3 @@
-# parameters:
-#     mdb_document.model.document.class: MDB\DocumentBundle\Document\Document
-#     mdb_document.model.file.class: MDB\DocumentBundle\Document\File
-#     mdb_document.model.link.class: MDB\DocumentBundle\Document\Link
-
-
 services:
     # Event Listeners/Subscribers
     mdb_document.event_listener.document_subscriber:
@@ -14,11 +8,8 @@ services:
     # Managers
     mdb_document.manager.document.default:
         class: MDB\DocumentBundle\Document\DocumentManager
-        arguments: ["@event_dispatcher", "@doctrine.odm.mongodb.document_manager", %mdb_document.model.document.class%, %mdb_document.model.link.class% ]
+        arguments: ["@event_dispatcher", "@doctrine.odm.mongodb.document_manager", %mdb_document.model.document.class% ]
 
-    mdb_document.manager.link.default:
-        class: MDB\DocumentBundle\Document\LinkManager
-        arguments: ["@doctrine.odm.mongodb.document_manager", %mdb_document.model.link.class% ]
 
     mdb_document.manager.file.default:
         class: MDB\DocumentBundle\Document\FileManager
@@ -37,11 +28,6 @@ services:
         tags:
             - { name: form.type, alias: mdb_document_file }
 
-    mdb_document.form_type.link:
-        class: MDB\DocumentBundle\Form\Type\LinkType
-        arguments: [%mdb_document.model.link.class%]
-        tags:
-            - { name: form.type, alias: mdb_document_link }
 
     mdb_document.form_type.pre_linked_document:
         class: MDB\DocumentBundle\Form\Type\PreLinkedDocumentType
@@ -49,18 +35,9 @@ services:
         tags:
             - { name: form.type, alias: mdb_document_pre_linked_document }
 
-    # Form Factory
-    mdb_document.form_factory.link:
-        class: MDB\DocumentBundle\Form\Factory\FormFactory
-        arguments: ["@form.factory", "mdb_document_link", "mdb_document_link" ]
-
     mdb_document.form_factory.document:
         class: MDB\DocumentBundle\Form\Factory\FormFactory
         arguments: ["@form.factory", "mdb_document_document", "mdb_document_document" ]
-
-    mdb_document.form_factory.pre_linked_document:
-        class: MDB\DocumentBundle\Form\Factory\FormFactory
-        arguments: ["@form.factory", "mdb_document_pre_linked_document", "mdb_document_pre_linked_document" ]
 
     mdb_document.form_factory.file:
         class: MDB\DocumentBundle\Form\Factory\FormFactory
@@ -81,8 +58,9 @@ services:
         tags:
             - { name: liip_imagine.data.loader, loader: grid_fs}
 
-    # mdb_document.search_provider.document:
-    #     class: MDB\DocumentBundle\Search\DocumentProvider
-    #     arguments: [ @foq_elastica.index.mdb_document.document ]
-    #     tags:
-    #         - { name: foq_elastica.provider, index: mdb_document, type: document}
+    mdb_document.serializer.handler.thumbnail:
+        class: MDB\DocumentBundle\Serializer\Handler\ThumbnailHandler
+        arguments: [@request, @liip_imagine.controller, @liip_imagine.cache.manager]
+        scope: request
+        tags:
+            - { name: jms_serializer.handler, type: Thumbnail, direction: serialization, format: json, method: serialize }
