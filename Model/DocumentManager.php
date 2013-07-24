@@ -4,8 +4,9 @@ namespace MDB\DocumentBundle\Model;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use MDB\DocumentBundle\Event\DocumentEvent;
 use MDB\DocumentBundle\Events;
+use MDB\DocumentBundle\Model\DocumentInterface;
 
-abstract class DocumentManager
+abstract class DocumentManager implements DocumentManagerInterface
 {
     protected $dispatcher;
 
@@ -14,7 +15,7 @@ abstract class DocumentManager
         $this->dispatcher = $dispatcher;
     }
 
-    public function saveDocument($document)
+    public function saveDocument(DocumentInterface $document)
     {
         $event = new DocumentEvent($document);
         $this->dispatcher->dispatch(Events::DOCUMENT_PRE_PERSIST, $event);
@@ -30,7 +31,7 @@ abstract class DocumentManager
         return $this->repository->findAll();
     }
 
-    public function findDocumentBy($criteria)
+    public function findDocumentBy(array $criteria)
     {
         return $this->repository->findOneBy($criteria);
     }
@@ -40,7 +41,7 @@ abstract class DocumentManager
         return $this->repository->findOneBy(array('_id' => new \MongoId($id)));
     }
 
-    public function findDocumentsBy($criteria)
+    public function findDocumentsBy(array $criteria)
     {
         return $this->repository->findBy($criteria);
     }

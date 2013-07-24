@@ -22,6 +22,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+                ->arrayNode('acl')->end()
                 ->arrayNode('document')->addDefaultsIfNotSet()
                     ->children()
                         ->arrayNode('form')->addDefaultsIfNotSet()
@@ -50,6 +51,11 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('document')->cannotBeEmpty()->defaultValue('mdb_document.manager.document.default')->end()
                                 ->scalarNode('file')->cannotBeEmpty()->defaultValue('mdb_document.manager.file.default')->end()
                                 // ->scalarNode('link')->cannotBeEmpty()->defaultValue('mdb_document.manager.link.default')->end()
+                            ->end()
+                        ->end()
+                        ->arrayNode('acl')->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('document')->cannotBeEmpty()->defaultValue('mdb_document.acl.document.security')->end()
                             ->end()
                         ->end()
                     ->end()

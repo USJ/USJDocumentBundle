@@ -1,0 +1,14 @@
+services:
+    mdb_document.manager.document.acl:
+        class: MDB\DocumentBundle\Acl\AclDocumentManager
+        arguments:
+            - @mdb_document.manager.document
+            - @mdb_document.acl.document
+
+    mdb_document.acl.document.security:
+        class: MDB\DocumentBundle\Acl\SecurityDocumentAcl
+        arguments:
+            - @security.context
+            - @security.acl.object_identity_retrieval_strategy # this could be replaced with role security
+            - @security.acl.provider
+            - %mdb_document.model.document.class%

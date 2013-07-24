@@ -25,11 +25,17 @@ class MDBDocumentExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
+        if (array_key_exists('acl', $config)) {
+            $loader->load('acl.yml');
+            $container->setAlias('mdb_document.acl.document', $config['service']['acl']['document']);
+        }
+
         // load configuration to container's parameter for later use.
         $container->setParameter('mdb_document.model.document.class', $config['class']['model']['document']);
         $container->setParameter('mdb_document.model.file.class', $config['class']['model']['file']);
 
         $container->setAlias('mdb_document.manager.document', $config['service']['manager']['document']);
         $container->setAlias('mdb_document.manager.file', $config['service']['manager']['file']);
+
     }
 }
