@@ -58,53 +58,6 @@ class DocumentManager extends BaseDocumentManager
         $this->dm->flush();
     }
 
-    // public function findDocumentsByLink(Link $link)
-    // {
-    //     return $this->repository->findDocumentsByClassAndObjectId($link->getClass(), $link->getObjectId());
-    // }
-
-    // public function unlinkObject($document, $link)
-    // {
-    //     $originalLinkCount = count($document->getLinks());
-    //     // find the link object
-    //     $document->removeLink($link);
-
-    //     if (!$originalLinkCount > count($document->getLinks())) {
-    //         throw new \RuntimeException("Document unlink failed");
-    //     }
-
-    //     $this->saveDocument($document);
-
-    //     if (count($document->getLinks()) < 1) {
-    //         $this->removeDocument($document);
-    //     }
-    // }
-
-    // public function linkObject(\MDB\DocumentBundle\Document\Document $document, $object)
-    // {
-    //     $objectClass = get_class($object);
-    //     if (!$this->isMappedClass($objectClass)) {
-    //         throw new \RuntimeException(sprintf("%s class was not mapped, cannot use for linking.", $objectClass));
-    //     }
-    //     $this->doLinkObject($document, $object);
-    // }
-
-    public function createPreLinkedDocument($object)
-    {
-        $objectClass = get_class($object);
-        if (!$this->isMappedClass($objectClass)) {
-            throw new \RuntimeException(sprintf("%s class was not mapped, cannot use for linking.", $objectClass));
-        }
-
-        $document = $this->createDocument();
-        $link = new $this->linkClass;
-        $link->setClass($objectClass)
-            ->setObjectId($object->getId());
-        $document->addLink($link);
-
-        return $document;
-    }
-
     public function findDocuments()
     {
         return $this->repository->findAll();
@@ -119,21 +72,6 @@ class DocumentManager extends BaseDocumentManager
     {
         return $this->dm;
     }
-
-    // protected function doLinkObject($document, $object)
-    // {
-    //     $link = new $this->linkClass;
-    //     $link->setClass(get_class($object))
-    //         ->setObjectId($object->getId());
-
-    //     $this->dispatcher->dispatch(new LinkEvent($link), Events::DOCUMENT_PRE_LINK );
-
-    //     $document->addLink($link);
-    //     $this->doSaveDocument($document);
-
-    //     $this->dispatcher->dispatch(new LinkEvent($link), Events::DOCUMENT_POST_LINK );
-
-    // }
 
     protected function doSaveDocument($document)
     {

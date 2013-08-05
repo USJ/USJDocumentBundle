@@ -16,5 +16,10 @@
     "autoload": {
         "psr-0": { "MDB\\DocumentBundle\\": "" }
     },
-    "target-dir": "MDB/DocumentBundle"
+    "target-dir": "MDB/DocumentBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.x-dev"
+        }
+    }
 }
