@@ -4,11 +4,12 @@ namespace MDB\DocumentBundle\Document;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Validator\Constraints as Assert;
+use MDB\DocumentBundle\Model\DocumentInterface;
 
 /**
  * @MongoDB\MappedSuperclass
  */
-class Document
+abstract class Document implements DocumentInterface
 {
     /**
      * @MongoDB\String
