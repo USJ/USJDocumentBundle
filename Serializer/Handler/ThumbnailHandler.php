@@ -22,19 +22,25 @@ class ThumbnailHandler {
         $this->cacheManager = $cacheManager;
 	}
 
-	public function serialize(JsonSerializationVisitor $visitor, $data, array $type)
-	{
-		$filter = $type['params'][0]['name'];
+    public function serialize(JsonSerializationVisitor $visitor, $data, array $type)
+    {
+        $filter = $type['params'][0]['name'];
+        $regex = $type['params'][1]['name'];
 
-		$imagemanagerResponse = $this->imagineController
+        if (preg_match($regex, $data->getMimeType())) {
+            $this->imagineController
                 ->filterAction(
                     $this->request,
-                    $data,      // original image you want to apply a filter to
+                    new \MongoId($data->getId()),      // original image you want to apply a filter to
                     $filter              // filter defined in config.yml
-        );
+                );
 
-        // string to put directly in the "src" of the tag <img>
-        $srcPath = $this->cacheManager->getBrowserPath($data, $filter);
-        return $srcPath;
-	}
+            // string to put directly in the "src" of the tag <img>
+            $path = $this->cacheManager->getBrowserPath($data, $filter);
+        } else {
+            $path = null;
+        }
+
+        return $path;
+    }
 }
