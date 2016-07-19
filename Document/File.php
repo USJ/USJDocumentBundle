@@ -1,71 +1,47 @@
 <?php
 namespace MDB\DocumentBundle\Document;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use MDB\DocumentBundle\Model\File as BaseFile;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @MongoDB\MappedSuperclass
  */
 class File extends BaseFile
 {
 
     /**
      * GridFSFile class
-     * @MongoDB\File
      */
     protected $gridFsFile;
 
     /**
-     * @MongoDB\String
      */
     protected $filename;
 
     /**
-     * @MongoDB\String
      */
     protected $mimeType;
 
     /**
-     * @Gedmo\Timestampable(on="create")
-     * @MongoDB\Timestamp
-     */
-    protected $createdAt;
-
-    /**
-     * @MongoDB\String
-     * @Gedmo\Blameable(on="create")
-     */
-    protected $uploadedBy;
-
-    /**
-     * @MongoDB\Int
      */
     protected $length;
 
     /**
-     * @MongoDB\Int
      */
     protected $chunkSize;
 
     /**
-     * @MongoDB\String
      */
     protected $md5;
 
     /**
-     * @MongoDB\String
      */
     protected $changeMessage;
 
     /**
-     * @MongoDB\Int
      */
     protected $version;
 
     /**
-     * @MongoDB\String
      */
     protected $format;
 

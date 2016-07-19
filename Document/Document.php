@@ -1,59 +1,23 @@
 <?php
 namespace MDB\DocumentBundle\Document;
 
-use Gedmo\Mapping\Annotation as Gedmo;
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-use Symfony\Component\Validator\Constraints as Assert;
 use MDB\DocumentBundle\Model\DocumentInterface;
 
 /**
- * @MongoDB\MappedSuperclass
  */
 abstract class Document implements DocumentInterface
 {
     /**
-     * @MongoDB\String
      */
     protected $description;
 
     /**
-     * @MongoDB\String
      */
     protected $title;
 
     /**
-     * @MongoDB\Timestamp
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $createdAt;
-
-    /**
-     * @MongoDB\Field(type="timestamp")
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updatedAt;
-
-    /**
-     * @Gedmo\Blameable(on="create")
-     * @MongoDB\String
-     */
-    protected $createdBy;
-
-    /**
-     * @MongoDB\String
-     * @Gedmo\Blameable(on="update")
-     */
-    protected $updatedBy;
-
-    /**
-     * @MongoDB\Collection
      */
     protected $tags = array();
-
-    /**
-     * @MongoDB\Boolean
-     */
-    protected $featured;
 
 
     /**
@@ -172,19 +136,6 @@ abstract class Document implements DocumentInterface
     }
 
     /**
-     * Set createAt
-     *
-     * @param  timestamp $createAt
-     * @return \Document
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
      * Get createAt
      *
      * @return timestamp $createAt
@@ -202,75 +153,6 @@ abstract class Document implements DocumentInterface
     public function addFiles(\MDB\DocumentBundle\Document\File $files)
     {
         $this->files[] = $files;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param  timestamp $updatedAt
-     * @return \Document
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return timestamp $updatedAt
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Set createdBy
-     *
-     * @param  string    $createdBy
-     * @return \Document
-     */
-    public function setCreatedBy($createdBy)
-    {
-        $this->createdBy = $createdBy;
-
-        return $this;
-    }
-
-    /**
-     * Get createdBy
-     *
-     * @return string $createdBy
-     */
-    public function getCreatedBy()
-    {
-        return $this->createdBy;
-    }
-
-    /**
-     * Set updatedBy
-     *
-     * @param  string    $updatedBy
-     * @return \Document
-     */
-    public function setUpdatedBy($updatedBy)
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedBy
-     *
-     * @return string $updatedBy
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updatedBy;
     }
 
     /**
@@ -292,18 +174,6 @@ abstract class Document implements DocumentInterface
     public function getTags()
     {
         return $this->tags;
-    }
-
-    public function isFeatured()
-    {
-        return $this->featured;
-    }
-
-    public function setFeatured($bool)
-    {
-        $this->featured = $bool;
-
-        return $this;
     }
 
     public function isImage()

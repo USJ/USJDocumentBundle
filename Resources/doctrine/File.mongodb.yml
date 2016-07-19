@@ -1,0 +1,24 @@
+MDB\DocumentBundle\Document\File:
+    type: mappedSuperclass
+    fields:
+        gridFsFile:
+            type: file
+        filename:
+            type: string
+        mimeType:
+            type: string
+        length:
+            type: int
+        chunkSize:
+            type: int
+        md5:
+            type: string
+        changeMessage:
+            type: string
+        version:
+            type: int
+        format:
+            type: string
+
+
+

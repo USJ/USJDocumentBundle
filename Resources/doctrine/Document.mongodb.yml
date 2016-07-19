@@ -1,0 +1,9 @@
+MDB\DocumentBundle\Document\Document:
+    type: mappedSuperclass
+    fields:
+        description:
+            type: string
+        title:
+            type: string
+        tags:
+            type: collection
