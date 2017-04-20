@@ -65,7 +65,6 @@ services:
 
     mdb_document.serializer.handler.thumbnail:
         class: MDB\DocumentBundle\Serializer\Handler\ThumbnailHandler
-        arguments: ['@request', '@liip_imagine.controller', '@liip_imagine.cache.manager']
-        scope: request
+        arguments: ['@request_stack', '@liip_imagine.controller', '@liip_imagine.cache.manager']
         tags:
             - { name: jms_serializer.handler, type: Thumbnail, direction: serialization, format: json, method: serialize }
