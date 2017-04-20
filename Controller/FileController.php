@@ -2,6 +2,7 @@
 namespace MDB\DocumentBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -37,6 +38,6 @@ class FileController extends Controller
             throw $this->createNotFoundException(sprintf('File with "%s" could not be found', $qId));
         }
 
-        return $this->container->get('mdb_document.file_response_factory')->createResponse($file, $download, $qFormat);
+        return new BinaryFileResponse($file);
     }
 }
