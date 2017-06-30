@@ -49,11 +49,6 @@ services:
         arguments: ["@form.factory", "mdb_document_file", "mdb_document_file" ]
 
     # Others
-    mdb_document.file_response_factory:
-        class: MDB\DocumentBundle\Factory\FileResponseFactory
-        calls:
-            - [ setContainer, [ '@service_container' ] ]
-
     mdb_document.partial_controller:
         class: MDB\DocumentBundle\Controller\PartialController
 
