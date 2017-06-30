@@ -1,5 +1,6 @@
 {
     "name": "mdb/document-bundle",
+    "version": "v2.0.9",
     "type": "symfony-bundle",
     "description": "MDBDocumentBundle",
     "keywords": ["MDB","document", "management", "media"],
